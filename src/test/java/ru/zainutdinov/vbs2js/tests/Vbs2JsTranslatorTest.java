@@ -6,7 +6,6 @@ import org.junit.Test;
 import ru.zainutdinov.vbs2js.translator.Vbs2JsTranslator;
 
 public class Vbs2JsTranslatorTest {
-	private static String JS_ETALON = "function Main() {\n}";
 
 	@Test
 	public void simpleSubTest() {
@@ -16,6 +15,6 @@ public class Vbs2JsTranslatorTest {
 
 		String jsCode = translator.translate(vbsCode);
 
-		Assert.assertEquals(JS_ETALON, jsCode);
+		Assert.assertEquals("function Main() {\n}", jsCode);
 	}
 }
