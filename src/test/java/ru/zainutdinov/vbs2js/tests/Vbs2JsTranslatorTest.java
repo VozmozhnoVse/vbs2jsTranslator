@@ -11,9 +11,7 @@ public class Vbs2JsTranslatorTest {
 	public void simpleSubTest() {
 		String vbsCode = "Sub Main\nEnd Sub";
 
-		Vbs2JsTranslator translator = new Vbs2JsTranslator();
-
-		String jsCode = translator.translate(vbsCode);
+		String jsCode = new Vbs2JsTranslator().translate(vbsCode);
 
 		Assert.assertEquals("function Main() {\n}", jsCode);
 	}
@@ -22,9 +20,16 @@ public class Vbs2JsTranslatorTest {
 	public void simplePublicSubTest() {
 		String vbsCode = "Public Sub Main\nEnd Sub";
 
-		Vbs2JsTranslator translator = new Vbs2JsTranslator();
+		String jsCode = new Vbs2JsTranslator().translate(vbsCode);
 
-		String jsCode = translator.translate(vbsCode);
+		Assert.assertEquals("function Main() {\n}", jsCode);
+	}
+
+	@Test
+	public void simplePrivateSubTest() {
+		String vbsCode = "Private Sub Main\nEnd Sub";
+
+		String jsCode = new Vbs2JsTranslator().translate(vbsCode);
 
 		Assert.assertEquals("function Main() {\n}", jsCode);
 	}

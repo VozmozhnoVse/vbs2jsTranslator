@@ -23,7 +23,7 @@ public class Vbs2JsTranslator {
 	public String translate(String vbsCode) {
 		String result = vbsCode;
 		
-		result = result.replace("Public ", "");
+		result = result.replaceAll("((Public)|(Private))\\s", "");
 		result = result.replace("End Sub", "}");
 		result = replaceSub(result);
 		
