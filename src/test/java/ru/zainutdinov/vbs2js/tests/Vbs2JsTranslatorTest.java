@@ -16,6 +16,6 @@ public class Vbs2JsTranslatorTest {
 
 		String jsCode = translator.translate(vbsCode);
 
-		Assert.assertEquals(jsCode, JS_ETALON);
+		Assert.assertEquals(JS_ETALON, jsCode);
 	}
 }
