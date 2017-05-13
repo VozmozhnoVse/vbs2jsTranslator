@@ -9,6 +9,17 @@ public class Vbs2JsTranslatorTest {
 
 	@Test
 	public void simpleSubTest() {
+		String vbsCode = "Sub Main\nEnd Sub";
+
+		Vbs2JsTranslator translator = new Vbs2JsTranslator();
+
+		String jsCode = translator.translate(vbsCode);
+
+		Assert.assertEquals("function Main() {\n}", jsCode);
+	}
+
+	@Test
+	public void simplePublicSubTest() {
 		String vbsCode = "Public Sub Main\nEnd Sub";
 
 		Vbs2JsTranslator translator = new Vbs2JsTranslator();
