@@ -9,11 +9,17 @@ public class Vbs2JsTranslator {
 		int subPosition = result.indexOf("Sub");
 		
 		if (subPosition >= 0) {
+			int parametersPosition = result.indexOf("(", subPosition + 3);
 			int spacePosition = result.indexOf("\n", subPosition + 3);
 			
-			result = result.substring(0, spacePosition) + "() {" + result.substring(spacePosition, result.length());
-			result = result.replace("Sub", "function");
-			
+			if (parametersPosition > 0 && parametersPosition < spacePosition) {
+				result = result.substring(0, spacePosition) + " {" + result.substring(spacePosition, result.length());
+			}
+			else {
+				result = result.substring(0, spacePosition) + "() {" + result.substring(spacePosition, result.length());
+			}
+
+			result = result.replaceFirst("Sub", "function");
 			result = replaceSub(result);
 		}
 
