@@ -29,4 +29,8 @@ public class Vbs2JsTranslator {
 		
 		return result;
 	}
+
+	public String translateSub(String vbsCode) {
+		return vbsCode;
+	}
 }
