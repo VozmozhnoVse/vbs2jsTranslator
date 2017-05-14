@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import ru.zainutdinov.vbs2js.translator.Vbs2JsTranslator;
 
-public class SubTests {
+public class TranslateSubTests {
 
 	@Test
 	public void translateSubTest_Simple() {
