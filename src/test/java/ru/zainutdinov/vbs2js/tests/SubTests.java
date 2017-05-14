@@ -8,7 +8,34 @@ import ru.zainutdinov.vbs2js.translator.Vbs2JsTranslator;
 public class SubTests {
 
 	@Test
-	public void SubWithOneParameterTest() {
+	public void translateSubTest_Simple() {
+		String vbsCode = "Sub Main\nEnd Sub";
+
+		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
+
+		Assert.assertEquals("function Main() {\n}", jsCode);
+	}
+
+	@Test
+	public void translateSubTest_Public() {
+		String vbsCode = "Public Sub Main\nEnd Sub";
+
+		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
+
+		Assert.assertEquals("function Main() {\n}", jsCode);
+	}
+
+	@Test
+	public void translateSubTest_Private() {
+		String vbsCode = "Private Sub Main\nEnd Sub";
+
+		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
+
+		Assert.assertEquals("function Main() {\n}", jsCode);
+	}
+
+	@Test
+	public void translateSubTest_WithOneParameter() {
 		String vbsCode = "Sub Main(Parameter)\nEnd Sub";
 
 		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);

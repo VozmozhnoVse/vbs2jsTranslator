@@ -19,8 +19,8 @@ public class Vbs2JsTranslator {
 
 		return result;
 	}
-	
-	public String translate(String vbsCode) {
+
+	public String translateSub(String vbsCode) {
 		String result = vbsCode;
 		
 		result = result.replaceAll("((Public)|(Private))\\s", "");
@@ -28,9 +28,5 @@ public class Vbs2JsTranslator {
 		result = replaceSub(result);
 		
 		return result;
-	}
-
-	public String translateSub(String vbsCode) {
-		return vbsCode;
 	}
 }
