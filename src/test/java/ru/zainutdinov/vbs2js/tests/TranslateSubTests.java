@@ -17,6 +17,15 @@ public class TranslateSubTests {
 	}
 
 	@Test
+	public void translateSubTest_TwoSimple() {
+		String vbsCode = "Sub Main1\nEnd Sub\nSub Main2\nEnd Sub";
+
+		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
+
+		Assert.assertEquals("function Main1() {\n}\nfunction Main2() {\n}", jsCode);
+	}
+
+	@Test
 	public void translateSubTest_Public() {
 		String vbsCode = "Public Sub Main\nEnd Sub";
 
