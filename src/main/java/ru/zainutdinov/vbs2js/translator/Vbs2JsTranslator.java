@@ -36,7 +36,11 @@ public class Vbs2JsTranslator {
 		return result;
 	}
 
+	public String translateFunction(String vbsCode) {
+		return vbsCode;
+	}
+
 	public String translateIfStatement(String vbsCode) {
-		return "";
+		return vbsCode;
 	}
 }
