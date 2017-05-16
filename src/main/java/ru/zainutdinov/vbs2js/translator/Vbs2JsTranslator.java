@@ -88,4 +88,17 @@ public class Vbs2JsTranslator {
 
 		return result;
 	}
+
+	public String translateIfStatement(String vbsCode) {
+		String result = vbsCode;
+
+		result = vbsCode
+				.replace("Then", "{")
+				.replace("ElseIf", "} else if")
+				.replace("Else", "} else {")
+				.replace("End If", "}")
+				.toLowerCase();
+
+		return result;
+	}
 }
