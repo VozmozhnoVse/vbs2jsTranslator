@@ -45,20 +45,20 @@ public class Vbs2JsTranslator {
 
 	private String replaceFunction(String vbsCode) {
 		String result = vbsCode;
-		int subPosition = result.indexOf("Function");
+		int functionPosition = result.indexOf("Function");
 		
-		if (subPosition >= 0) {
-			int parametersPosition = result.indexOf("(", subPosition + 3);
-			int spacePosition = result.indexOf("\n", subPosition + 3);
+		if (functionPosition >= 0) {
+			int parametersPosition = result.indexOf("(", functionPosition + 3);
+			int spacePosition = result.indexOf("\n", functionPosition + 3);
 			
-			String functionName = result.substring(subPosition + 9, spacePosition);
+			String functionName = result.substring(functionPosition + 9, spacePosition);
 			
 			if (parametersPosition > 0 && parametersPosition < spacePosition) {
-				result = result.substring(0, subPosition) + "function " + functionName + " {" + result.substring(spacePosition, result.length());
+				result = result.substring(0, functionPosition) + "function " + functionName + " {" + result.substring(spacePosition, result.length());
 				functionName = functionName.substring(0, functionName.indexOf("("));
 			}
 			else {
-				result = result.substring(0, subPosition) + "function " + functionName + "() {" + result.substring(spacePosition, result.length());
+				result = result.substring(0, functionPosition) + "function " + functionName + "() {" + result.substring(spacePosition, result.length());
 			}
 			
 			result = replaceReturn(functionName, result);
@@ -83,7 +83,7 @@ public class Vbs2JsTranslator {
 		String result = vbsCode;
 		
 		result = result.replaceAll("((Public)|(Private))\\s", "");
-		result = result.replace("End Sub", "}");
+		result = result.replace("End Function", "}");
 		result = replaceFunction(result);
 
 		return result;

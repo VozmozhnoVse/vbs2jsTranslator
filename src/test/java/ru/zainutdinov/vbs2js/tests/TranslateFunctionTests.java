@@ -9,7 +9,7 @@ public class TranslateFunctionTests {
 
 	@Test
 	public void translateFunctionTest_Simple() {
-		String vbsCode = "Function Main\n\tMain = true\nEnd Sub";
+		String vbsCode = "Function Main\n\tMain = true\nEnd Function";
 
 		String jsCode = new Vbs2JsTranslator().translateFunction(vbsCode);
 
@@ -18,7 +18,7 @@ public class TranslateFunctionTests {
 
 	@Test
 	public void translateFunctionTest_TwoSimple() {
-		String vbsCode = "Function Main1\n\tMain1 = true\nEnd Sub\nFunction Main2\n\tMain2 = true\nEnd Sub";
+		String vbsCode = "Function Main1\n\tMain1 = true\nEnd Function\nFunction Main2\n\tMain2 = true\nEnd Function";
 
 		String jsCode = new Vbs2JsTranslator().translateFunction(vbsCode);
 
@@ -27,7 +27,7 @@ public class TranslateFunctionTests {
 
 	@Test
 	public void translateFunctionTest_Public() {
-		String vbsCode = "Public Function Main\n\tMain = true\nEnd Sub";
+		String vbsCode = "Public Function Main\n\tMain = true\nEnd Function";
 
 		String jsCode = new Vbs2JsTranslator().translateFunction(vbsCode);
 
@@ -36,7 +36,7 @@ public class TranslateFunctionTests {
 
 	@Test
 	public void translateFunctionTest_Private() {
-		String vbsCode = "Private Function Main\n\tMain = true\nEnd Sub";
+		String vbsCode = "Private Function Main\n\tMain = true\nEnd Function";
 
 		String jsCode = new Vbs2JsTranslator().translateFunction(vbsCode);
 
@@ -45,7 +45,7 @@ public class TranslateFunctionTests {
 
 	@Test
 	public void translateFunctionTest_WithOneParameterAndTwoReturns() {
-		String vbsCode = "Function Main(Parameter)\n\tif (Parameter) then\n\t\tMain = true\n\telse\n\t\tMain = false\n\tend if\nEnd Sub";
+		String vbsCode = "Function Main(Parameter)\n\tif (Parameter) then\n\t\tMain = true\n\telse\n\t\tMain = false\n\tend if\nEnd Function";
 
 		String jsCode = new Vbs2JsTranslator().translateFunction(vbsCode);
 
