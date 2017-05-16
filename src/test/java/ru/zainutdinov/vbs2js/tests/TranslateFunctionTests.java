@@ -51,7 +51,4 @@ public class TranslateFunctionTests {
 
 		Assert.assertEquals("function Main(Parameter) {\n\tif (Parameter) then\n\t\treturn true;\n\telse\n\t\treturn false;\n\tend if\n}", jsCode);
 	}
-
-	// public
-	// private
 }

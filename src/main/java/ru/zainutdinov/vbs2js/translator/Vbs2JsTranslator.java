@@ -26,6 +26,49 @@ public class Vbs2JsTranslator {
 		return result;
 	}
 
+	private String replaceReturn(String functionName, String vbsCode) {
+		String result = vbsCode;
+
+		int returnPosition = result.indexOf(functionName + " =");
+
+		if (returnPosition >= 0) {
+			int endPosition = result.indexOf("\n", returnPosition + functionName.length() + 3);
+
+			result = result.substring(0, endPosition) + ";" + result.substring(endPosition, result.length());
+			result = result.substring(0, returnPosition) + "return" + result.substring( + functionName.length() + 2 + returnPosition, result.length());
+
+			result = replaceReturn(functionName, result);
+		}
+
+		return result;
+	}
+
+	private String replaceFunction(String vbsCode) {
+		String result = vbsCode;
+		int subPosition = result.indexOf("Function");
+		
+		if (subPosition >= 0) {
+			int parametersPosition = result.indexOf("(", subPosition + 3);
+			int spacePosition = result.indexOf("\n", subPosition + 3);
+			
+			String functionName = result.substring(subPosition + 9, spacePosition);
+			
+			if (parametersPosition > 0 && parametersPosition < spacePosition) {
+				result = result.substring(0, subPosition) + "function " + functionName + " {" + result.substring(spacePosition, result.length());
+				functionName = functionName.substring(0, functionName.indexOf("("));
+			}
+			else {
+				result = result.substring(0, subPosition) + "function " + functionName + "() {" + result.substring(spacePosition, result.length());
+			}
+			
+			result = replaceReturn(functionName, result);
+			
+			result = replaceFunction(result);
+		}
+
+		return result;
+	}
+
 	public String translateSub(String vbsCode) {
 		String result = vbsCode;
 		
@@ -37,6 +80,12 @@ public class Vbs2JsTranslator {
 	}
 
 	public String translateFunction(String vbsCode) {
-		return vbsCode;
+		String result = vbsCode;
+		
+		result = result.replaceAll("((Public)|(Private))\\s", "");
+		result = result.replace("End Sub", "}");
+		result = replaceFunction(result);
+
+		return result;
 	}
 }
