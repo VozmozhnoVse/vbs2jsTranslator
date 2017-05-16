@@ -101,4 +101,8 @@ public class Vbs2JsTranslator {
 
 		return result;
 	}
+
+	public String translateFor(String vbsCode) {
+		return vbsCode;
+	}
 }
