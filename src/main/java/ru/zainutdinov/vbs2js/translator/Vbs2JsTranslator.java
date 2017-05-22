@@ -105,4 +105,12 @@ public class Vbs2JsTranslator {
 	public String translateFor(String vbsCode) {
 		return vbsCode;
 	}
+
+	public String translateTrue(String vbsCode) {
+		return vbsCode;
+	}
+
+	public String translateFalse(String vbsCode) {
+		return vbsCode;
+	}
 }
