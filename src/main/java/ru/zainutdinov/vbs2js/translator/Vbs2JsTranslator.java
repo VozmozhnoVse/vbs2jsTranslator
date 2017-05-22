@@ -1,5 +1,7 @@
 package ru.zainutdinov.vbs2js.translator;
 
+import java.util.ArrayList;
+
 public class Vbs2JsTranslator {
 	public Vbs2JsTranslator() {
 	}
@@ -112,5 +114,17 @@ public class Vbs2JsTranslator {
 
 	public String translateFalse(String vbsCode) {
 		return vbsCode;
+	}
+
+	public ArrayList<String> lexemes(String vbsCode) {
+		ArrayList<String> lexemes = new ArrayList<String>();
+		
+		String[] strings = vbsCode.split("\\b");
+		
+		for (int i = 0; i < strings.length; i++) {
+			lexemes.add(strings[i]);
+		}
+		
+		return lexemes;
 	}
 }
