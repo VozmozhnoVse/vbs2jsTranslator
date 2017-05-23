@@ -2,6 +2,10 @@ package ru.zainutdinov.vbs2js.translator;
 
 import java.util.ArrayList;
 
+import ru.zainutdinov.vbs2js.ILexeme;
+import ru.zainutdinov.vbs2js.Public;
+import ru.zainutdinov.vbs2js.Sub;
+
 public class Vbs2JsTranslator {
 	public Vbs2JsTranslator() {
 	}
@@ -72,13 +76,24 @@ public class Vbs2JsTranslator {
 	}
 
 	public String translateSub(String vbsCode) {
-		String result = vbsCode;
+	
+		ArrayList<ILexeme> l = lexemes(vbsCode);
 		
-		result = result.replaceAll("((Public)|(Private))\\s", "");
-		result = result.replace("End Sub", "}");
-		result = replaceSub(result);
+		String result = new String();
 		
+		for (int i = 0; i < l.size(); i++) {
+			result += l.get(i).js();
+		}
+
 		return result;
+		
+//		String result = vbsCode;
+		
+//		result = result.replaceAll("((Public)|(Private))\\s", "");
+//		result = result.replace("End Sub", "}");
+//		result = replaceSub(result);
+		
+//		return result;
 	}
 
 	public String translateFunction(String vbsCode) {
@@ -116,13 +131,43 @@ public class Vbs2JsTranslator {
 		return vbsCode;
 	}
 
-	public ArrayList<String> lexemes(String vbsCode) {
-		ArrayList<String> lexemes = new ArrayList<String>();
+	public ArrayList<String> words(String vbsCode) {
+		ArrayList<String> words = new ArrayList<String>();
 		
 		String[] strings = vbsCode.split("\\b");
 		
 		for (int i = 0; i < strings.length; i++) {
-			lexemes.add(strings[i]);
+			words.add(strings[i]);
+		}
+		
+		return words;
+	}
+
+	public ArrayList<ILexeme> lexemes(String vbsCode) {
+		ArrayList<ILexeme> lexemes = new ArrayList<ILexeme>();
+
+		ArrayList<String> words = words(vbsCode);
+
+		int i = 0;
+		while (i < words.size()) {
+			String word = words.get(i);
+			if ("Public".equals(word)) {
+				lexemes.add(new Public());
+			}
+			else if ("Sub".equals(word)) {
+				if ("(".equals(words.get(i + 3))) {
+					// TODO:
+				}
+				else {
+					lexemes.add(new Sub(words.get(i + 2), ""));
+					i += 2;
+				}
+			}
+			else if ("End".equals(word)) {
+				i += 2;
+			}
+
+			i++;
 		}
 		
 		return lexemes;

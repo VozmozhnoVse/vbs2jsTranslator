@@ -13,7 +13,7 @@ public class TranslateSubTests {
 
 		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
 
-		Assert.assertEquals("function Main() {\n}", jsCode);
+		Assert.assertEquals("function Main() {\n}\n", jsCode);
 	}
 
 	@Test
@@ -22,7 +22,7 @@ public class TranslateSubTests {
 
 		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
 
-		Assert.assertEquals("function Main1() {\n}\nfunction Main2() {\n}", jsCode);
+		Assert.assertEquals("function Main1() {\n}\nfunction Main2() {\n}\n", jsCode);
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class TranslateSubTests {
 
 		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
 
-		Assert.assertEquals("function Main() {\n}", jsCode);
+		Assert.assertEquals("function Main() {\n}\n", jsCode);
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class TranslateSubTests {
 
 		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
 
-		Assert.assertEquals("function Main() {\n}", jsCode);
+		Assert.assertEquals("function Main() {\n}\n", jsCode);
 	}
 
 	@Test
@@ -49,6 +49,6 @@ public class TranslateSubTests {
 
 		String jsCode = new Vbs2JsTranslator().translateSub(vbsCode);
 
-		Assert.assertEquals("function Main(Parameter) {\n}", jsCode);
+		Assert.assertEquals("function Main(Parameter) {\n}\n", jsCode);
 	}
 }
