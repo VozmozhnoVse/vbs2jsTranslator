@@ -4,23 +4,10 @@ public class Vbs2JsTranslator {
 	public Vbs2JsTranslator() {
 	}
 
-	private String replaceReturn(String functionName, String vbsCode) {
-		String result = vbsCode;
+	/* TODO: delete
 
-		int returnPosition = result.indexOf(functionName + " =");
 
-		if (returnPosition >= 0) {
-			int endPosition = result.indexOf("\n", returnPosition + functionName.length() + 3);
-
-			result = result.substring(0, endPosition) + ";" + result.substring(endPosition, result.length());
-			result = result.substring(0, returnPosition) + "return" + result.substring( + functionName.length() + 2 + returnPosition, result.length());
-
-			result = replaceReturn(functionName, result);
-		}
-
-		return result;
-	}
-
+	/* TODO: delete
 	private String replaceFunction(String vbsCode) {
 		String result = vbsCode;
 		int functionPosition = result.indexOf("Function");
@@ -46,16 +33,7 @@ public class Vbs2JsTranslator {
 
 		return result;
 	}
-
-	public String translateFunction(String vbsCode) {
-		String result = vbsCode;
-		
-		result = result.replaceAll("((Public)|(Private))\\s", "");
-		result = result.replace("End Function", "}");
-		result = replaceFunction(result);
-
-		return result;
-	}
+	*/
 
 	public String translateIfStatement(String vbsCode) {
 		String result = vbsCode;

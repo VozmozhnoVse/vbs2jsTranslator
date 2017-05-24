@@ -20,12 +20,12 @@ public class VBS {
 		return parameters;
 	}
 
-	private String extractBody(Words words) {
+	private String extractBody(Words words, String endString) {
 		String body = new String();
 		
 		String word = words.cutFirst();
-		while (!(word.equals("End") && words.nextIs("Sub"))) {
-			body += words;
+		while (!(word.equals("End") && words.nextIs(endString))) {
+			body += word;
 			word = words.cutFirst();
 		}
 
@@ -33,6 +33,24 @@ public class VBS {
 		
 		return body;
 	}
+
+	/* TODO: delete
+	private String replaceReturn(String functionName, String vbsCode) {
+		String result = vbsCode;
+
+		int returnPosition = result.indexOf(functionName + " =");
+
+		if (returnPosition >= 0) {
+			int endPosition = result.indexOf("\n", returnPosition + functionName.length() + 3);
+
+			result = result.substring(0, endPosition) + ";" + result.substring(endPosition, result.length());
+			result = result.substring(0, returnPosition) + "return" + result.substring( + functionName.length() + 2 + returnPosition, result.length());
+
+			result = replaceReturn(functionName, result);
+		}
+
+		return result;
+	}*/
 
 	public VBS(String code) {
 		Words words = new Words(code);
@@ -49,8 +67,15 @@ public class VBS {
 			else if ("Sub".equals(word)) {
 				String name = words.cutFirst();
 				String parameters = extractParameters(words);
-				String body = extractBody(words);
+				String body = extractBody(words, "Sub");
 				lexemes.add(new Sub(name, parameters, body));			
+			}
+			else if ("Function".equals(word)) {
+				String name = words.cutFirst();
+				String parameters = extractParameters(words);
+				String body = extractBody(words, "Function");
+				// TODO: body = replaceReturn(name, body);
+				lexemes.add(new Function(name, parameters, body));			
 			}
 			
 			word = words.cutFirst();

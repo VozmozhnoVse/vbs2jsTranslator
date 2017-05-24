@@ -15,6 +15,9 @@ public class Words {
 				if (word.equals(",")) {
 					word += " ";
 				}
+				else if (word.equals("=")) {
+					word = " " + word + " ";
+				}
 				words.add(word);
 			}
 		}

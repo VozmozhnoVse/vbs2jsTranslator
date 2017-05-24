@@ -26,7 +26,7 @@ public class SubTests {
 	public void testJS_body() {
 		Sub sub = new Sub("Main", "", "some_correct_text;");
 
-		Assert.assertEquals("function Main() {\nsome_correct_text;\n}\n", sub.js());
+		Assert.assertEquals("function Main() {\n\tsome_correct_text;\n}\n", sub.js());
 	}
 
 	@Test

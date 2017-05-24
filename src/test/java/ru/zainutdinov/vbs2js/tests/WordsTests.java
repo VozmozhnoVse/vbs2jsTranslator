@@ -53,6 +53,16 @@ public class WordsTests {
 	}
 
 	@Test
+	public void testCutFirst_addSpacesBeforeAndAfterEqual() {
+		Words words = new Words("Parameter1=Parameter2");
+
+		Assert.assertEquals("Parameter1", words.cutFirst());
+		Assert.assertEquals(" = ", words.cutFirst());
+		Assert.assertEquals("Parameter2", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
 	public void testNextIs() {
 		Words words = new Words("Sub");
 
