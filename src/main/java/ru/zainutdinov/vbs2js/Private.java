@@ -1,6 +1,6 @@
 package ru.zainutdinov.vbs2js;
 
-public class Public implements ILexeme {
+public class Private implements ILexeme {
 
 	@Override
 	public String js() {
@@ -9,7 +9,7 @@ public class Public implements ILexeme {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass() == Public.class) {
+		if (obj.getClass() == Private.class) {
 			return true;
 		}
 

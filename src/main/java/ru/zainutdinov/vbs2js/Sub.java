@@ -3,31 +3,37 @@ package ru.zainutdinov.vbs2js;
 public class Sub implements ILexeme {
 	String name;
 	String parameters;
+	String body;
 	
-	public Sub(String name, String parameters) {
+	public Sub(String name, String parameters, String body) {
 		this.name = name;
 		this.parameters = parameters;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		Sub lexeme = (Sub)obj;
-		
-		// TODO: test
-		if (lexeme == null) {
-			return false;
-		}
-
-		// TODO: test
-		if (this.name.equals(lexeme.name) && this.parameters.equals(lexeme.parameters)) {
-			return true;
-		}
-
-		return false;
+		this.body = body;
 	}
 
 	@Override
 	public String js() {
-		return new String("function " + name + "(" + parameters + ") {\n}\n");
+		String result = new String();
+		
+		result += "function " + name + "(" + parameters + ") {\n";
+		
+		if (!body.isEmpty()) {
+			result += body + "\n";
+		}
+
+		result += "}\n";
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass() != Sub.class) {
+			return false;
+		}
+
+		Sub sub = (Sub)obj;
+		
+		return name.equals(sub.name) && parameters.equals(sub.parameters) && body.equals(sub.body);
 	}
 }
