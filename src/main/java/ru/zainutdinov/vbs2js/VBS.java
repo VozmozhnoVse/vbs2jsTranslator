@@ -53,6 +53,32 @@ public class VBS {
 		return result;
 	}
 
+	private String extractExpression(Words words) {
+		String result = new String();
+
+		String word = words.cutFirst();
+		while (!word.equals("Then")) {
+			result += word;
+			word = words.cutFirst();
+		}
+
+		return result;
+	}
+	
+	private String extractBodyThen(Words words) {
+		String result = new String();
+
+		String word = words.cutFirst();
+		while (!word.equals("End") && words.nextIs("If")) {
+			result += word;
+			word = words.cutFirst();
+		}
+
+		words.cutFirst();
+
+		return result;
+	}
+
 	public VBS(String code) {
 		Words words = new Words(code);
 
@@ -75,8 +101,12 @@ public class VBS {
 				String body = extractBody(words, "Function");
 				body = replaceReturn(name, body);
 				lexemes.add(new Function(name, parameters, body));			
+			} else if ("If".equals(word)) {
+				String expression = extractExpression(words);
+				String bodyThen = extractBodyThen(words);
+				lexemes.add(new If(expression, bodyThen));			
 			}
-
+			
 			word = words.cutFirst();
 		}
 	}

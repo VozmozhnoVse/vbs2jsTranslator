@@ -7,15 +7,6 @@ import ru.zainutdinov.vbs2js.translator.Vbs2JsTranslator;
 
 public class TranslateIfStatementTests {
 	@Test
-	public void translateIfStatementTest_If() {
-		String vbsCode = "If (True) Then\nEnd If";
-
-		String jsCode = new Vbs2JsTranslator().translateIfStatement(vbsCode);
-
-		Assert.assertEquals("if (true) {\n}", jsCode);
-	}
-
-	@Test
 	public void translateIfStatementTest_IfElse() {
 		String vbsCode = "If (True) Then\nElse\nEnd If";
 
