@@ -120,12 +120,12 @@ public class VBSTests {
 	
 	@Test
 	public void testLexemes_FunctionWithOneParameterAndTwoReturns() {
-		VBS vbs = new VBS("Function Main(Parameter)\n\tif (Parameter) then\n\t\tMain = true\n\telse\n\t\tMain = false\n\tend if\nEnd Function");
+		VBS vbs = new VBS("Function Main(Parameter)\n\tif (Parameter) then\n\t\tMain = true\n\telse\n\t\tMain = false\n\tendif\nEnd Function");
 
 		Lexemes lexemes = vbs.lexemes();
 
 		Assert.assertEquals(1, lexemes.size());
-		Assert.assertEquals(new Function("Main", "Parameter", "\tif (Parameter) then\n\t\treturn true;\n\telse\n\t\treturn false;\n\tend if\n"), lexemes.get(0));
+		Assert.assertEquals(new Function("Main", "Parameter", "if (Parameter) then\nreturn true;\nelse\nreturn false;\nendif"), lexemes.get(0));
 	}
 
 	@Test
@@ -146,5 +146,15 @@ public class VBSTests {
 
 		Assert.assertEquals(1, lexemes.size());
 		Assert.assertEquals(new Private(), lexemes.get(0));
+	}
+
+	@Test
+	public void testLexemes_IfThenEndif() {
+		VBS vbs = new VBS("If (True) Then\nEnd If");
+
+		Lexemes lexemes = vbs.lexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+		// TODO: Assert.assertEquals(new If("(True)", "\n"), lexemes.get(0));
 	}
 }

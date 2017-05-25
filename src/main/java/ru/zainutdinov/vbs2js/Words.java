@@ -18,6 +18,18 @@ public class Words {
 				else if (word.equals("=")) {
 					word = " " + word + " ";
 				}
+				else if (word.equals("if")) {
+					word = word + " ";
+				}
+				else if (word.equals("then")) {
+					word = " " + word + "\n";
+				}
+				else if (word.equals("else")) {
+					word = "\n" + word + "\n";
+				}
+				else if (word.equals("endif")) {
+					word = "\n" + word;
+				}
 				words.add(word);
 			}
 		}

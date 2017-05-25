@@ -61,6 +61,38 @@ public class WordsTests {
 		Assert.assertEquals("Parameter2", words.cutFirst());
 		Assert.assertEquals(null, words.cutFirst());
 	}
+	
+	@Test
+	public void testCutFirst_addSpaceAfterIf() {
+		Words words = new Words("if");
+
+		Assert.assertEquals("if ", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
+	public void testCutFirst_addSpaceAfterAndNewLineAfterThen() {
+		Words words = new Words("then");
+
+		Assert.assertEquals(" then\n", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
+	public void testCutFirst_addNewLineBeforeAndAfterElse() {
+		Words words = new Words("else");
+
+		Assert.assertEquals("\nelse\n", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
+	public void testCutFirst_addNewLineBeforeEndif() {
+		Words words = new Words("endif");
+
+		Assert.assertEquals("\nendif", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
 
 	@Test
 	public void testNextIs() {

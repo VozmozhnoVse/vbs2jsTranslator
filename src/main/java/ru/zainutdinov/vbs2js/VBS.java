@@ -34,23 +34,24 @@ public class VBS {
 		return body;
 	}
 
-	/* TODO: delete
-	private String replaceReturn(String functionName, String vbsCode) {
-		String result = vbsCode;
-
-		int returnPosition = result.indexOf(functionName + " =");
-
-		if (returnPosition >= 0) {
-			int endPosition = result.indexOf("\n", returnPosition + functionName.length() + 3);
-
-			result = result.substring(0, endPosition) + ";" + result.substring(endPosition, result.length());
-			result = result.substring(0, returnPosition) + "return" + result.substring( + functionName.length() + 2 + returnPosition, result.length());
-
-			result = replaceReturn(functionName, result);
+	private String replaceReturn(String name, String code) {
+		Words words = new Words(code);
+		String result = new String();
+		
+		String word = words.cutFirst();
+		while (word != null) {
+			if (word.equals(name) && words.nextIs(" = ")) {
+				words.cutFirst();
+				result += "return " + words.cutFirst() + ";";
+			}
+			else {
+				result += word;
+			}
+			word = words.cutFirst();
 		}
-
+		
 		return result;
-	}*/
+	}
 
 	public VBS(String code) {
 		Words words = new Words(code);
@@ -74,7 +75,7 @@ public class VBS {
 				String name = words.cutFirst();
 				String parameters = extractParameters(words);
 				String body = extractBody(words, "Function");
-				// TODO: body = replaceReturn(name, body);
+				body = replaceReturn(name, body);
 				lexemes.add(new Function(name, parameters, body));			
 			}
 			
