@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ru.zainutdinov.vbs2js.Function;
+import ru.zainutdinov.vbs2js.If;
 import ru.zainutdinov.vbs2js.Lexemes;
 import ru.zainutdinov.vbs2js.Private;
 import ru.zainutdinov.vbs2js.Public;
@@ -155,6 +156,6 @@ public class VBSTests {
 		Lexemes lexemes = vbs.lexemes();
 
 		Assert.assertEquals(1, lexemes.size());
-		// TODO: Assert.assertEquals(new If("(True)", "\n"), lexemes.get(0));
+		Assert.assertEquals(new If("(True)", ""), lexemes.get(0));
 	}
 }
