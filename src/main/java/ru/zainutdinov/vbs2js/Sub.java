@@ -1,9 +1,9 @@
 package ru.zainutdinov.vbs2js;
 
 public class Sub implements ILexeme {
-	String name;
-	String parameters;
-	String body;
+	private String name;
+	private String parameters;
+	private String body;
 	
 	public Sub(String name, String parameters, String body) {
 		this.name = name;
@@ -13,7 +13,7 @@ public class Sub implements ILexeme {
 
 	@Override
 	public String js() {
-		String result = new String();
+		String result = "";
 		
 		result += "function " + name + "(" + parameters + ") {\n";
 		
@@ -32,7 +32,7 @@ public class Sub implements ILexeme {
 			return false;
 		}
 
-		Sub sub = (Sub)obj;
+		Sub sub = (Sub) obj;
 		
 		return name.equals(sub.name) && parameters.equals(sub.parameters) && body.equals(sub.body);
 	}

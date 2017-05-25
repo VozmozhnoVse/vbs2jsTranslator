@@ -5,7 +5,7 @@ public class VBS {
 	private Lexemes lexemes = new Lexemes();
 	
 	private String extractParameters(Words words) {
-		String parameters = new String();
+		String parameters = "";
 		
 		if (words.nextIs("(")) {
 			words.cutFirst();
@@ -90,21 +90,18 @@ public class VBS {
 			}
 			if ("Private".equals(word)) {
 				lexemes.add(new Private());
-			}
-			else if ("Sub".equals(word)) {
+			} else if ("Sub".equals(word)) {
 				String name = words.cutFirst();
 				String parameters = extractParameters(words);
 				String body = extractBody(words, "Sub");
 				lexemes.add(new Sub(name, parameters, body));			
-			}
-			else if ("Function".equals(word)) {
+			} else if ("Function".equals(word)) {
 				String name = words.cutFirst();
 				String parameters = extractParameters(words);
 				String body = extractBody(words, "Function");
 				body = replaceReturn(name, body);
 				lexemes.add(new Function(name, parameters, body));			
-			}
-			else if ("If".equals(word)) {
+			} else if ("If".equals(word)) {
 				String expression = extractExpression(words);
 				String bodyThen = extractBodyThen(words);
 				String[] expressions = null;// TODO extractBodyElse(words);

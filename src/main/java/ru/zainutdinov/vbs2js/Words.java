@@ -3,7 +3,7 @@ package ru.zainutdinov.vbs2js;
 import java.util.ArrayList;
 
 public class Words {
-	ArrayList<String> words = new ArrayList<String>();
+	private ArrayList<String> words = new ArrayList<String>();
 
 	public Words(String text) {
 		String[] strings = text.split("\\b");
