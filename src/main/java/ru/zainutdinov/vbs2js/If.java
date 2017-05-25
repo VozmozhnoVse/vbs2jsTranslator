@@ -1,12 +1,12 @@
 package ru.zainutdinov.vbs2js;
 
 public class If implements ILexeme {
-	String expression;
-	String bodyThen;
+	String[] expression;
+	String[] body;
 	
-	public If(String expression, String bodyThen) {
+	public If(String[] expression, String[] body) {
 		this.expression = expression;
-		this.bodyThen = bodyThen;
+		this.body = body;
 	}
 
 	@Override
@@ -14,11 +14,15 @@ public class If implements ILexeme {
 		String result = new String();
 		
 		result += "if " + expression + " {\n";
-		
+/*		
 		if (!bodyThen.isEmpty()) {
 			result += "\t" + bodyThen + "\n";
 		}
 
+		if (bodyElse.length > 0) {
+			result += "} else {\n\t" + bodyElse + "\n";			
+		}
+*/
 		result += "}\n";
 		
 		return result;
@@ -31,7 +35,7 @@ public class If implements ILexeme {
 		}
 
 		If if_ = (If)obj;
-		
-		return expression.equals(if_.expression) && bodyThen.equals(if_.bodyThen);
+
+		return expression.equals(if_.expression) && body.equals(if_.body);
 	}
 }

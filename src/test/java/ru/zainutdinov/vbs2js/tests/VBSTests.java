@@ -151,11 +151,31 @@ public class VBSTests {
 
 	@Test
 	public void testLexemes_IfThenEndif() {
-		VBS vbs = new VBS("If (True) Then\nEnd If");
+		VBS vbs = new VBS("If (True) Then\n\tsome_correct_text\nEnd If");
 
 		Lexemes lexemes = vbs.lexemes();
 
 		Assert.assertEquals(1, lexemes.size());
-		Assert.assertEquals(new If("(True)", ""), lexemes.get(0));
+		Assert.assertEquals(new If(new String[] {"(True)"}, new String[] {"some_correct_text"}), lexemes.get(0));
+	}
+
+	@Test
+	public void testLexemes_IfThenElseEndif() {
+		VBS vbs = new VBS("If (True) Then\n\tsome_correct_text\nElse\n\tanother_correct_text\nEnd If");
+
+		Lexemes lexemes = vbs.lexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+		Assert.assertEquals(new If(new String[] {"(True)"}, new String[] {"some_correct_text", "another_correct_text"}), lexemes.get(0));
+	}
+
+	@Test
+	public void testLexemes_IfThenElseIfElseEndif() {
+		VBS vbs = new VBS("If (True) Then\n\tsome_correct_text\nElseIf (False) Then\n\tanother_correct_text1\nElse\n\tanother_correct_text2\nEnd If");
+
+		Lexemes lexemes = vbs.lexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+		Assert.assertEquals(new If(new String[] {"(True)", "(False)"}, new String[] {"some_correct_text", "another_correct_text1", "another_correct_text2"}), lexemes.get(0));
 	}
 }

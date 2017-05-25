@@ -107,7 +107,9 @@ public class VBS {
 			else if ("If".equals(word)) {
 				String expression = extractExpression(words);
 				String bodyThen = extractBodyThen(words);
-				lexemes.add(new If(expression, bodyThen));			
+				String[] expressions = null;// TODO extractBodyElse(words);
+				String[] bodys = null; // TODO: rename
+				lexemes.add(new If(expressions, bodys));
 			}
 			
 			word = words.cutFirst();

@@ -4,7 +4,8 @@ public class Vbs2JsTranslator {
 	public Vbs2JsTranslator() {
 	}
 
-	public String translateIfStatement(String vbsCode) {
+	// TODO: delete
+/*	public String translateIfStatement(String vbsCode) {
 		String result = vbsCode;
 
 		result = vbsCode
@@ -15,5 +16,5 @@ public class Vbs2JsTranslator {
 				.toLowerCase();
 
 		return result;
-	}
+	}*/
 }
