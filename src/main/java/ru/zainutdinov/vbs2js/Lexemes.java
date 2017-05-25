@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Lexemes {
 
-	List<ILexeme> lexemes = new ArrayList<ILexeme>();
+	private List<ILexeme> lexemes = new ArrayList<ILexeme>();
 	
 	public int size() {
 		return lexemes.size();
@@ -20,10 +20,10 @@ public class Lexemes {
 	}
 
 	public String js() {
-		String result = new String();
+		String result = "";
 		
-		for (int i = 0; i < lexemes.size(); i++) {
-			result += lexemes.get(i).js();
+		for (ILexeme lexeme : lexemes) {
+			result += lexeme.js();
 		}
 
 		return result;

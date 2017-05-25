@@ -4,7 +4,7 @@ public class Private implements ILexeme {
 
 	@Override
 	public String js() {
-		return new String();
+		return "";
 	}
 
 	@Override
