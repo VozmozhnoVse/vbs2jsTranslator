@@ -21,7 +21,7 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n}\n", if_.js());
+		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n}\n", if_.js(0));
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else {\n\tanother_correct_text;\n}\n", if_.js());
+		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else {\n\tanother_correct_text;\n}\n", if_.js(0));
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else if (false) {\n\tanother_correct_text;\n}\n", if_.js());
+		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else if (false) {\n\tanother_correct_text;\n}\n", if_.js(0));
 	}
 
 	@Test
@@ -66,7 +66,23 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else if (false) {\n\tanother_correct_text1;\n} else {\n\tanother_correct_text2;\n}\n", if_.js());
+		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else if (false) {\n\tanother_correct_text1;\n} else {\n\tanother_correct_text2;\n}\n", if_.js(0));
+	}
+
+	@Test
+	public void testJS_Tab() {
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		expression.add("(false)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text1;");
+		body.add("another_correct_text2;");
+
+		If if_ = new If(expression, body);
+
+		Assert.assertEquals("\tif (true) {\n\t\tsome_correct_text;\n\t} else if (false) {\n\t\tanother_correct_text1;\n\t} else {\n\t\tanother_correct_text2;\n\t}\n", if_.js(1));
 	}
 
 	@Test

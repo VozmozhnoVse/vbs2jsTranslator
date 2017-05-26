@@ -1,5 +1,7 @@
 package ru.zainutdinov.vbs2js.lexeme;
 
+import ru.zainutdinov.vbs2js.StringUtils;
+
 public class Function implements ILexeme {
 	private String name;
 	private String parameters;
@@ -12,16 +14,18 @@ public class Function implements ILexeme {
 	}
 
 	@Override
-	public String js() {
+	public String js(int tabLevel) {
+		String tabs = StringUtils.repeat("\t", tabLevel);
 		String result = "";
 		
-		result += "function " + name + "(" + parameters + ") {\n";
+		result += tabs + "function " + name + "(" + parameters + ") {\n";
 		
 		if (!body.isEmpty()) {
-			result +=  "\t" + body + "\n";
+			// TODO body.js(tabLevel + 1)
+			result +=  tabs + "\t" + body + "\n";
 		}
 
-		result += "}\n";
+		result += tabs + "}\n";
 		
 		return result;
 	}

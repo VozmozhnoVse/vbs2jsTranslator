@@ -13,14 +13,15 @@ public class LexemesTests {
 
 	@Test
 	public void test() {
-		Lexemes lexemes = new Lexemes();
-		
-		lexemes.add(new Public());
-		lexemes.add(new Sub("Main", "", ""));
+		Lexemes actual = new Lexemes();
+		actual.add(new Public());
+		actual.add(new Sub("Main", "", null));
 
-		Assert.assertEquals(2, lexemes.size());
-		Assert.assertEquals(new Public(), lexemes.get(0));
-		Assert.assertEquals(new Sub("Main", "", ""), lexemes.get(1));
+		Lexemes expected = new Lexemes();
+		expected.add(new Public());
+		expected.add(new Sub("Main", "", null));
+
+		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -28,9 +29,9 @@ public class LexemesTests {
 		Lexemes lexemes = new Lexemes();
 		
 		lexemes.add(new Public());
-		lexemes.add(new Sub("Main", "", ""));
+		lexemes.add(new Sub("Main", "", null));
 
-		Assert.assertEquals("function Main() {\n}\n", lexemes.js());
+		Assert.assertEquals("function Main() {\n}\n", lexemes.js(0));
 	}
 
 	@Test
@@ -38,19 +39,19 @@ public class LexemesTests {
 		Lexemes lexemes = new Lexemes();
 
 		lexemes.add(new Private());
-		lexemes.add(new Sub("Main", "", ""));
+		lexemes.add(new Sub("Main", "", null));
 
-		Assert.assertEquals("function Main() {\n}\n", lexemes.js());
+		Assert.assertEquals("function Main() {\n}\n", lexemes.js(0));
 	}
 
 	@Test
 	public void testJS_SubsTwo() {
 		Lexemes lexemes = new Lexemes();
 
-		lexemes.add(new Sub("Main1", "", ""));
-		lexemes.add(new Sub("Main2", "", ""));
+		lexemes.add(new Sub("Main1", "", null));
+		lexemes.add(new Sub("Main2", "", null));
 
-		Assert.assertEquals("function Main1() {\n}\nfunction Main2() {\n}\n", lexemes.js());
+		Assert.assertEquals("function Main1() {\n}\nfunction Main2() {\n}\n", lexemes.js(0));
 	}
 
 	@Test
@@ -60,7 +61,17 @@ public class LexemesTests {
 		lexemes.add(new Public());
 		lexemes.add(new Function("Main", "", "return true;"));
 
-		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", lexemes.js());
+		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", lexemes.js(0));
+	}
+
+	@Test
+	public void testJS_Tab() {
+		Lexemes lexemes = new Lexemes();
+		
+		lexemes.add(new Public());
+		lexemes.add(new Function("Main", "", "return true;"));
+
+		Assert.assertEquals("\tfunction Main() {\n\t\treturn true;\n\t}\n", lexemes.js(1));
 	}
 
 	@Test
@@ -70,7 +81,7 @@ public class LexemesTests {
 		lexemes.add(new Private());
 		lexemes.add(new Function("Main", "", "return true;"));
 
-		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", lexemes.js());
+		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", lexemes.js(0));
 	}
 
 	@Test
@@ -80,6 +91,6 @@ public class LexemesTests {
 		lexemes.add(new Function("Main1", "", "return true;"));
 		lexemes.add(new Function("Main2", "", "return true;"));
 
-		Assert.assertEquals("function Main1() {\n\treturn true;\n}\nfunction Main2() {\n\treturn true;\n}\n", lexemes.js());
+		Assert.assertEquals("function Main1() {\n\treturn true;\n}\nfunction Main2() {\n\treturn true;\n}\n", lexemes.js(0));
 	}
 }

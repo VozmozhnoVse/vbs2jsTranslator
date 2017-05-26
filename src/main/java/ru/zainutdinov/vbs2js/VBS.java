@@ -8,12 +8,13 @@ import ru.zainutdinov.vbs2js.lexeme.If;
 import ru.zainutdinov.vbs2js.lexeme.Private;
 import ru.zainutdinov.vbs2js.lexeme.Public;
 import ru.zainutdinov.vbs2js.lexeme.Sub;
+import ru.zainutdinov.vbs2js.lexeme.Unknown;
 
 public class VBS {
 
 	private Lexemes lexemes = new Lexemes();
 	
-	private String extractParameters(Words words) {
+	private static String extractParameters(Words words) {
 		String parameters = "";
 		
 		if (words.nextIs("(")) {
@@ -29,7 +30,7 @@ public class VBS {
 		return parameters;
 	}
 
-	private String extractBody(Words words, String endString) {
+	private static String extractBody(Words words, String endString) {
 		String body = new String();
 		
 		String word = words.cutFirst();
@@ -43,7 +44,7 @@ public class VBS {
 		return body;
 	}
 
-	private String replaceReturn(String name, String code) {
+	private static String replaceReturn(String name, String code) {
 		Words words = new Words(code);
 		String result = new String();
 		
@@ -62,7 +63,7 @@ public class VBS {
 		return result;
 	}
 
-	private void extractIf(Words words, List<String> expression, List<String> body) {
+	private static void extractIf(Words words, List<String> expression, List<String> body) {
 		String word = words.cutFirst();
 
 		String nextExpression = "";
@@ -102,9 +103,9 @@ public class VBS {
 		words.cutFirst();
 	}
 
-	public VBS(String code) {
-		Words words = new Words(code);
-
+	private static Lexemes parse(Words words) {
+		Lexemes lexemes = new Lexemes();
+		
 		String word = words.cutFirst();
 
 		while (word != null) {
@@ -117,7 +118,11 @@ public class VBS {
 				String name = words.cutFirst();
 				String parameters = extractParameters(words);
 				String body = extractBody(words, "Sub");
-				lexemes.add(new Sub(name, parameters, body));			
+				// TODO optimize conversion words -> string -> words
+				// TODO call new parse recursively
+				Lexemes lexemes1 = new Lexemes();
+				lexemes1.add(new Unknown(body));
+				lexemes.add(new Sub(name, parameters, lexemes1));			
 			} else if ("Function".equals(word)) {
 				String name = words.cutFirst();
 				String parameters = extractParameters(words);
@@ -133,6 +138,14 @@ public class VBS {
 			
 			word = words.cutFirst();
 		}
+
+		return lexemes;
+	}
+	
+	public VBS(String code) {
+		Words words = new Words(code);
+
+		lexemes = parse(words);
 	}
 
 	public Lexemes lexemes() {

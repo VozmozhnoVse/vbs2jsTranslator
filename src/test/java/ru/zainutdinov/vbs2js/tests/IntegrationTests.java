@@ -11,7 +11,7 @@ public class IntegrationTests {
 	public void test_usualCase() {
 		VBS vbs = new VBS(FileUtilities.readFileToString("usualCase.vbs"));
 
-		String jsActual = vbs.lexemes().js();
+		String jsActual = vbs.lexemes().js(0);
 		String jsExpected = FileUtilities.readFileToString("usualCase.js");
 
 		Assert.assertEquals(jsExpected, jsActual);;

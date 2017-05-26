@@ -1,27 +1,35 @@
 package ru.zainutdinov.vbs2js.lexeme;
 
+import ru.zainutdinov.vbs2js.Lexemes;
+import ru.zainutdinov.vbs2js.StringUtils;
+
 public class Sub implements ILexeme {
 	private String name;
 	private String parameters;
-	private String body;
-	
-	public Sub(String name, String parameters, String body) {
+	private Lexemes body;
+
+	public Sub(String name, String parameters, Lexemes body) {
 		this.name = name;
 		this.parameters = parameters;
-		this.body = body;
+		
+		if (body == null) {
+			this.body = new Lexemes();
+		}
+		else {
+			this.body = body;
+		}
 	}
 
 	@Override
-	public String js() {
+	public String js(int tabLevel) {
+		String tabs = StringUtils.repeat("\t", tabLevel);
 		String result = "";
 		
-		result += "function " + name + "(" + parameters + ") {\n";
-		
-		if (!body.isEmpty()) {
-			result += "\t" + body + "\n";
-		}
+		result += tabs + "function " + name + "(" + parameters + ") {\n";
 
-		result += "}\n";
+		result += body.js(tabLevel + 1);
+
+		result += tabs + "}\n";
 		
 		return result;
 	}

@@ -2,6 +2,8 @@ package ru.zainutdinov.vbs2js.lexeme;
 
 import java.util.List;
 
+import ru.zainutdinov.vbs2js.StringUtils;
+
 public class If implements ILexeme {
 	List<String> expression;
 	List<String> body;
@@ -12,12 +14,15 @@ public class If implements ILexeme {
 	}
 
 	@Override
-	public String js() {
+	public String js(int tabLevel) {
+		String tabs = StringUtils.repeat("\t", tabLevel);
 		String result = new String();
 
 		int i = 0;
 		for (; i < expression.size(); i++) {
 		
+			result += tabs;
+
 			if (i > 0) {
 				result += "} else ";
 			}
@@ -25,17 +30,20 @@ public class If implements ILexeme {
 			result += "if " + expression.get(i) + " {\n";
 			
 			if (!body.get(i).isEmpty()) {
-				result += "\t" + body.get(i) + "\n";
+				// TODO body.js(tabLevel + 1)
+				result += tabs + "\t" + body.get(i) + "\n";
 			}
 		}
 
 		if (body.size() > i) {
 			if (!body.get(i).isEmpty()) {
-				result += "} else {\n\t" + body.get(i) + "\n";
+				result += tabs + "} else {\n";
+				// TODO body.js(tabLevel + 1)
+				result += tabs + "\t" + body.get(i) + "\n";
 			}
 		}
 
-		result += "}\n";
+		result += tabs + "}\n";
 		
 		return result;
 	}

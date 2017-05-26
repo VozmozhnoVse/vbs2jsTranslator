@@ -12,14 +12,21 @@ public class FunctionTests {
 	public void testJS_emptyParametersList() {
 		Function function = new Function("Main", "", "return true;");
 
-		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", function.js());
+		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", function.js(0));
 	}
 	
+	@Test
+	public void testJS_Tab() {
+		Function function = new Function("Main", "", "return true;");
+
+		Assert.assertEquals("\tfunction Main() {\n\t\treturn true;\n\t}\n", function.js(1));
+	}
+
 	@Test
 	public void testJS_threeParameters() {
 		Function function = new Function("Main", "parameter1, parameter2, parameter3", "return true;");
 
-		Assert.assertEquals("function Main(parameter1, parameter2, parameter3) {\n\treturn true;\n}\n", function.js());
+		Assert.assertEquals("function Main(parameter1, parameter2, parameter3) {\n\treturn true;\n}\n", function.js(0));
 	}
 
 	@Test

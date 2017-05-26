@@ -3,7 +3,7 @@ package ru.zainutdinov.vbs2js.lexeme;
 public class Public implements ILexeme {
 
 	@Override
-	public String js() {
+	public String js(int tabLevel) {
 		return "";
 	}
 

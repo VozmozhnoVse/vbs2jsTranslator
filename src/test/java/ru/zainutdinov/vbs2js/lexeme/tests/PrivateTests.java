@@ -12,7 +12,7 @@ public class PrivateTests {
 	public void testJS() {
 		Private private_ = new Private();
 
-		Assert.assertEquals("", private_.js());
+		Assert.assertEquals("", private_.js(0));
 	}
 
 	@Test

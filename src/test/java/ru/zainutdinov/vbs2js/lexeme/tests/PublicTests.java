@@ -12,7 +12,7 @@ public class PublicTests {
 	public void testJS() {
 		Public public_ = new Public();
 
-		Assert.assertEquals("", public_.js());
+		Assert.assertEquals("", public_.js(0));
 	}
 	
 	@Test

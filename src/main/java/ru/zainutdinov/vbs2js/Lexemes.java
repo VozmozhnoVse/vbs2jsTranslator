@@ -8,26 +8,30 @@ import ru.zainutdinov.vbs2js.lexeme.ILexeme;
 public class Lexemes {
 
 	private List<ILexeme> lexemes = new ArrayList<ILexeme>();
-	
-	public int size() {
-		return lexemes.size();
-	}
-
-	public ILexeme get(int i) {
-		return lexemes.get(i);
-	}
 
 	public void add(ILexeme lexeme) {
 		lexemes.add(lexeme);
 	}
 
-	public String js() {
+	public String js(int tabLevel) {
 		String result = "";
 		
 		for (ILexeme lexeme : lexemes) {
-			result += lexeme.js();
+			result += lexeme.js(tabLevel);
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass() != Lexemes.class) {
+			return false;
+		}
+
+		Lexemes lexemes = (Lexemes) obj;
+
+		// TODO: optimize...
+		return js(0).equals(lexemes.js(0));
 	}
 }
