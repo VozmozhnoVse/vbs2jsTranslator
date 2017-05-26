@@ -1,5 +1,8 @@
 package ru.zainutdinov.vbs2js.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -129,6 +132,8 @@ public class VBSTests {
 		Assert.assertEquals(new Function("Main", "Parameter", "if (Parameter) then\nreturn true;\nelse\nreturn false;\nendif"), lexemes.get(0));
 	}
 
+	//TODO: test for function when "main=true; some_text" and we cannot simple replace "main=true;" to "return true;"...
+	
 	@Test
 	public void testLexemes_Public() {
 		VBS vbs = new VBS("Public");
@@ -151,31 +156,53 @@ public class VBSTests {
 
 	@Test
 	public void testLexemes_IfThenEndif() {
-		VBS vbs = new VBS("If (True) Then\n\tsome_correct_text\nEnd If");
+		VBS vbs = new VBS("If (true) Then\n\tsome_correct_text\nEnd If");
+
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+		
+		expression.add("(true)");
+		body.add("some_correct_text");
 
 		Lexemes lexemes = vbs.lexemes();
 
 		Assert.assertEquals(1, lexemes.size());
-		Assert.assertEquals(new If(new String[] {"(True)"}, new String[] {"some_correct_text"}), lexemes.get(0));
+		Assert.assertEquals(new If(expression, body), lexemes.get(0));
 	}
 
 	@Test
 	public void testLexemes_IfThenElseEndif() {
-		VBS vbs = new VBS("If (True) Then\n\tsome_correct_text\nElse\n\tanother_correct_text\nEnd If");
+		VBS vbs = new VBS("If (true) Then\n\tsome_correct_text\nElse\n\tanother_correct_text\nEnd If");
+
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		body.add("some_correct_text");
+		body.add("another_correct_text");
 
 		Lexemes lexemes = vbs.lexemes();
 
 		Assert.assertEquals(1, lexemes.size());
-		Assert.assertEquals(new If(new String[] {"(True)"}, new String[] {"some_correct_text", "another_correct_text"}), lexemes.get(0));
+		Assert.assertEquals(new If(expression, body), lexemes.get(0));
 	}
 
 	@Test
 	public void testLexemes_IfThenElseIfElseEndif() {
-		VBS vbs = new VBS("If (True) Then\n\tsome_correct_text\nElseIf (False) Then\n\tanother_correct_text1\nElse\n\tanother_correct_text2\nEnd If");
+		VBS vbs = new VBS("If (true) Then\n\tsome_correct_text\nElseIf (false) Then\n\tanother_correct_text1\nElse\n\tanother_correct_text2\nEnd If");
+
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		expression.add("(false)");
+		body.add("some_correct_text");
+		body.add("another_correct_text1");
+		body.add("another_correct_text2");
 
 		Lexemes lexemes = vbs.lexemes();
 
 		Assert.assertEquals(1, lexemes.size());
-		Assert.assertEquals(new If(new String[] {"(True)", "(False)"}, new String[] {"some_correct_text", "another_correct_text1", "another_correct_text2"}), lexemes.get(0));
+		Assert.assertEquals(new If(expression, body), lexemes.get(0));
 	}
 }

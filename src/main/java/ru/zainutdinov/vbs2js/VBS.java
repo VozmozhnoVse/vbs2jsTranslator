@@ -1,5 +1,8 @@
 package ru.zainutdinov.vbs2js;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VBS {
 
 	private Lexemes lexemes = new Lexemes();
@@ -53,30 +56,44 @@ public class VBS {
 		return result;
 	}
 
-	private String extractExpression(Words words) {
-		String result = new String();
-
+	private void extractIf(Words words, List<String> expression, List<String> body) {
 		String word = words.cutFirst();
-		while (!word.equals("Then")) {
-			result += word;
+
+		String nextExpression = "";
+		String nextBody = "";
+		String scope = "expression";
+		
+		while (!(word.equals("End") && words.nextIs("If"))) {
+			
+			if (scope.equals("expression")) {
+				if (word.equals("Then")) {
+					scope = "body";
+					expression.add(nextExpression);
+					nextExpression = "";
+				}
+				else {
+					nextExpression += word;
+				}
+			} else if (scope.equals("body")) {
+				if (word.equals("ElseIf")) {
+					scope = "expression";
+					body.add(nextBody);
+					nextBody = "";
+				}
+				else if (word.equals("Else")) {
+					body.add(nextBody);
+					nextBody = "";
+				}
+				else {
+					nextBody += word;
+				}
+			}
+			
 			word = words.cutFirst();
 		}
 
-		return result;
-	}
-	
-	private String extractBodyThen(Words words) {
-		String result = new String();
-
-		String word = words.cutFirst();
-		while (!word.equals("End") && words.nextIs("If")) {
-			result += word;
-			word = words.cutFirst();
-		}
-
+		body.add(nextBody);
 		words.cutFirst();
-
-		return result;
 	}
 
 	public VBS(String code) {
@@ -102,11 +119,10 @@ public class VBS {
 				body = replaceReturn(name, body);
 				lexemes.add(new Function(name, parameters, body));			
 			} else if ("If".equals(word)) {
-				String expression = extractExpression(words);
-				String bodyThen = extractBodyThen(words);
-				String[] expressions = null;// TODO extractBodyElse(words);
-				String[] bodys = null; // TODO: rename
-				lexemes.add(new If(expressions, bodys));
+				List<String> expression = new ArrayList<String>();
+				List<String> body = new ArrayList<String>();
+				extractIf(words, expression, body);
+				lexemes.add(new If(expression, body));
 			}
 			
 			word = words.cutFirst();

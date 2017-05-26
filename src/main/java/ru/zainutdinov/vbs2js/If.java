@@ -1,10 +1,12 @@
 package ru.zainutdinov.vbs2js;
 
+import java.util.List;
+
 public class If implements ILexeme {
-	String[] expression;
-	String[] body;
+	List<String> expression;
+	List<String> body;
 	
-	public If(String[] expression, String[] body) {
+	public If(List<String> expression, List<String> body) {
 		this.expression = expression;
 		this.body = body;
 	}
@@ -12,17 +14,27 @@ public class If implements ILexeme {
 	@Override
 	public String js() {
 		String result = new String();
+
+		int i = 0;
+		for (; i < expression.size(); i++) {
 		
-		result += "if " + expression + " {\n";
-/*		
-		if (!bodyThen.isEmpty()) {
-			result += "\t" + bodyThen + "\n";
+			if (i > 0) {
+				result += "} else ";
+			}
+			
+			result += "if " + expression.get(i) + " {\n";
+			
+			if (!body.get(i).isEmpty()) {
+				result += "\t" + body.get(i) + "\n";
+			}
 		}
 
-		if (bodyElse.length > 0) {
-			result += "} else {\n\t" + bodyElse + "\n";			
+		if (body.size() > i) {
+			if (!body.get(i).isEmpty()) {
+				result += "} else {\n\t" + body.get(i) + "\n";
+			}
 		}
-*/
+
 		result += "}\n";
 		
 		return result;
@@ -37,5 +49,6 @@ public class If implements ILexeme {
 		If if_ = (If)obj;
 
 		return expression.equals(if_.expression) && body.equals(if_.body);
+		//return js().equals(if_.js());
 	}
 }

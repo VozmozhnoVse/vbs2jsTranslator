@@ -1,5 +1,8 @@
 package ru.zainutdinov.vbs2js.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,44 +13,97 @@ public class IfTests {
 
 	@Test
 	public void testJS_IfThen() {
-		If if_ = new If(new String[] {"(true)"}, new String[] {"some_correct_text;"});
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		body.add("some_correct_text;");
+
+		If if_ = new If(expression, body);
 
 		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n}\n", if_.js());
 	}
 	
 	@Test
 	public void testJS_IfThenElse() {
-		If if_ = new If(new String[] {"(true)"}, new String[] {"some_correct_text;", "another_correct_text;"});
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text;");
+
+		If if_ = new If(expression, body);
 
 		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else {\n\tanother_correct_text;\n}\n", if_.js());
 	}
 
 	@Test
 	public void testJS_IfThenElseIf() {
-		If if_ = new If(new String[] {"(true)", "(false)"}, new String[] {"some_correct_text;", "another_correct_text;"});
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		expression.add("(false)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text;");
+
+		If if_ = new If(expression, body);
 
 		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else if (false) {\n\tanother_correct_text;\n}\n", if_.js());
 	}
 
 	@Test
 	public void testJS_IfThenElseIfElse() {
-		If if_ = new If(new String[] {"(true)", "(false)"}, new String[] {"some_correct_text;", "another_correct_text1;", "another_correct_text2;"});
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		expression.add("(false)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text1;");
+		body.add("another_correct_text2;");
+
+		If if_ = new If(expression, body);
 
 		Assert.assertEquals("if (true) {\n\tsome_correct_text;\n} else if (false) {\n\tanother_correct_text1;\n} else {\n\tanother_correct_text2;\n}\n", if_.js());
 	}
 
 	@Test
 	public void testEquals_true() {
-		Assert.assertEquals(new If(new String[] {"(true)"}, new String[] {"some_correct_text;", "another_correct_text;"}), new If(new String[] {"(true)"}, new String[] {"some_correct_text;", "another_correct_text;"}));
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text;");
+
+		Assert.assertEquals(new If(expression, body), new If(expression, body));
 	}
 
 	@Test
 	public void testEquals_false() {
-		Assert.assertNotEquals(new If(new String[] {"(true)"}, new String[] {"some_correct_text;", "another_correct_text;"}), new If(new String[] {"(false)"}, new String[] {"some_correct_text;", "another_correct_text;"}));
+		List<String> expression1 = new ArrayList<String>();
+		List<String> expression2 = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression1.add("(true)");
+		expression2.add("(false)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text;");
+
+		Assert.assertNotEquals(new If(expression1, body), new If(expression2, body));
 	}
 
 	@Test
 	public void testEquals_falseAnotherType() {
-		Assert.assertNotEquals(new If(new String[] {"(true)"}, new String[] {"some_correct_text;", "another_correct_text;"}), new Public());
+		List<String> expression = new ArrayList<String>();
+		List<String> body = new ArrayList<String>();
+
+		expression.add("(true)");
+		body.add("some_correct_text;");
+		body.add("another_correct_text;");
+
+		Assert.assertNotEquals(new If(expression, body), new Public());
 	}
 }
