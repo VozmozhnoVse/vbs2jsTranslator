@@ -3,6 +3,8 @@ package ru.zainutdinov.vbs2js;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.zainutdinov.vbs2js.lexeme.ILexeme;
+
 public class Lexemes {
 
 	private List<ILexeme> lexemes = new ArrayList<ILexeme>();

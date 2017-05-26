@@ -3,11 +3,11 @@ package ru.zainutdinov.vbs2js.tests;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ru.zainutdinov.vbs2js.Function;
 import ru.zainutdinov.vbs2js.Lexemes;
-import ru.zainutdinov.vbs2js.Private;
-import ru.zainutdinov.vbs2js.Public;
-import ru.zainutdinov.vbs2js.Sub;
+import ru.zainutdinov.vbs2js.lexeme.Function;
+import ru.zainutdinov.vbs2js.lexeme.Private;
+import ru.zainutdinov.vbs2js.lexeme.Public;
+import ru.zainutdinov.vbs2js.lexeme.Sub;
 
 public class LexemesTests {
 

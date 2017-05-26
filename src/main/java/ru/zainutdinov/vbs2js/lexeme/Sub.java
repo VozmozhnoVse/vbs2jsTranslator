@@ -1,11 +1,11 @@
-package ru.zainutdinov.vbs2js;
+package ru.zainutdinov.vbs2js.lexeme;
 
-public class Function implements ILexeme {
+public class Sub implements ILexeme {
 	private String name;
 	private String parameters;
 	private String body;
 	
-	public Function(String name, String parameters, String body) {
+	public Sub(String name, String parameters, String body) {
 		this.name = name;
 		this.parameters = parameters;
 		this.body = body;
@@ -18,7 +18,7 @@ public class Function implements ILexeme {
 		result += "function " + name + "(" + parameters + ") {\n";
 		
 		if (!body.isEmpty()) {
-			result +=  "\t" + body + "\n";
+			result += "\t" + body + "\n";
 		}
 
 		result += "}\n";
@@ -28,12 +28,12 @@ public class Function implements ILexeme {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass() != Function.class) {
+		if (obj.getClass() != Sub.class) {
 			return false;
 		}
 
-		Function function = (Function) obj;
+		Sub sub = (Sub) obj;
 		
-		return name.equals(function.name) && parameters.equals(function.parameters) && body.equals(function.body);
+		return name.equals(sub.name) && parameters.equals(sub.parameters) && body.equals(sub.body);
 	}
 }

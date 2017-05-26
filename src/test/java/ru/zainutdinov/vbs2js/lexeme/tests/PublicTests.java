@@ -1,10 +1,10 @@
-package ru.zainutdinov.vbs2js.tests;
+package ru.zainutdinov.vbs2js.lexeme.tests;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import ru.zainutdinov.vbs2js.Private;
-import ru.zainutdinov.vbs2js.Public;
+import ru.zainutdinov.vbs2js.lexeme.Private;
+import ru.zainutdinov.vbs2js.lexeme.Public;
 
 public class PublicTests {
 

@@ -1,4 +1,4 @@
-package ru.zainutdinov.vbs2js;
+package ru.zainutdinov.vbs2js.lexeme;
 
 import java.util.List;
 

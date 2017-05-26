@@ -3,6 +3,12 @@ package ru.zainutdinov.vbs2js;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.zainutdinov.vbs2js.lexeme.Function;
+import ru.zainutdinov.vbs2js.lexeme.If;
+import ru.zainutdinov.vbs2js.lexeme.Private;
+import ru.zainutdinov.vbs2js.lexeme.Public;
+import ru.zainutdinov.vbs2js.lexeme.Sub;
+
 public class VBS {
 
 	private Lexemes lexemes = new Lexemes();

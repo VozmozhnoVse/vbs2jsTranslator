@@ -1,4 +1,4 @@
-package ru.zainutdinov.vbs2js.tests;
+package ru.zainutdinov.vbs2js.lexeme.tests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ru.zainutdinov.vbs2js.Public;
-import ru.zainutdinov.vbs2js.If;
+import ru.zainutdinov.vbs2js.lexeme.If;
+import ru.zainutdinov.vbs2js.lexeme.Public;
 
 public class IfTests {
 

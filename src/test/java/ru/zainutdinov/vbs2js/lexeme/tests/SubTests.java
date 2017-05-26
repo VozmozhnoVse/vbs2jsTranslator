@@ -1,10 +1,10 @@
-package ru.zainutdinov.vbs2js.tests;
+package ru.zainutdinov.vbs2js.lexeme.tests;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import ru.zainutdinov.vbs2js.Public;
-import ru.zainutdinov.vbs2js.Sub;
+import ru.zainutdinov.vbs2js.lexeme.Public;
+import ru.zainutdinov.vbs2js.lexeme.Sub;
 
 public class SubTests {
 
