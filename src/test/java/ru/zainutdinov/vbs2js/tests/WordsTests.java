@@ -95,6 +95,38 @@ public class WordsTests {
 	}
 
 	@Test
+	public void testCutFirst_falseCamelcase() {
+		Words words = new Words("False");
+
+		Assert.assertEquals("false", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
+	public void testCutFirst_falseUppercase() {
+		Words words = new Words("FALSE");
+
+		Assert.assertEquals("false", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+	
+	@Test
+	public void testCutFirst_trueCamelcase() {
+		Words words = new Words("True");
+
+		Assert.assertEquals("true", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
+	public void testCutFirst_trueUppercase() {
+		Words words = new Words("TRUE");
+
+		Assert.assertEquals("true", words.cutFirst());
+		Assert.assertEquals(null, words.cutFirst());
+	}
+
+	@Test
 	public void testNextIs() {
 		Words words = new Words("Sub");
 

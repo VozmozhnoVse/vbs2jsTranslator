@@ -30,6 +30,12 @@ public class Words {
 				else if (word.equals("endif")) {
 					word = "\n" + word;
 				}
+				else if (word.equalsIgnoreCase("false")) {
+					word = "false";
+				}
+				else if (word.equalsIgnoreCase("true")) {
+					word = "true";
+				}
 				words.add(word);
 			}
 		}
