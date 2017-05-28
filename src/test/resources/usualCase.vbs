@@ -3,7 +3,7 @@ Private Sub SubName
 End Sub
 
 Public Function FunctionName(Parameter)
-	If Parameter Is Nothing Then
+	If Parameter Then
 		FunctionName = false
 	Else
 		FunctionName = True

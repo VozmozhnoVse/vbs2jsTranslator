@@ -4,46 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.zainutdinov.vbs2js.lexeme.Function;
+import ru.zainutdinov.vbs2js.lexeme.ILexeme;
 import ru.zainutdinov.vbs2js.lexeme.If;
 import ru.zainutdinov.vbs2js.lexeme.Private;
 import ru.zainutdinov.vbs2js.lexeme.Public;
 import ru.zainutdinov.vbs2js.lexeme.Sub;
 import ru.zainutdinov.vbs2js.lexeme.Unknown;
+import ru.zainutdinov.vbs2js.word.IWord;
 
 public class VBS {
-
-	private Lexemes lexemes = new Lexemes();
-	
-	private static String extractParameters(Words words) {
-		String parameters = "";
-		
-		if (words.nextIs("(")) {
-			words.cutFirst();
-			
-			String word = words.cutFirst();
-			while (!word.equals(")")) {
-				parameters += word;
-				word = words.cutFirst();
-			}
-		}
-
-		return parameters;
-	}
-
-	private static String extractBody(Words words, String endString) {
-		String body = new String();
-		
-		String word = words.cutFirst();
-		while (!(word.equals("End") && words.nextIs(endString))) {
-			body += word;
-			word = words.cutFirst();
-		}
-
-		words.cutFirst();
-		
-		return body;
-	}
-
 	private static String replaceReturn(String name, String code) {
 		Words words = new Words(code);
 		String result = new String();
@@ -70,10 +39,10 @@ public class VBS {
 		String nextBody = "";
 		String scope = "expression";
 		
-		while (!(word.equals("End") && words.nextIs("If"))) {
+		while (!(word.equals("end") && words.nextIs("if"))) {
 			
 			if (scope.equals("expression")) {
-				if (word.equals("Then")) {
+				if (word.equals("then")) {
 					scope = "body";
 					expression.add(nextExpression);
 					nextExpression = "";
@@ -82,12 +51,12 @@ public class VBS {
 					nextExpression += word;
 				}
 			} else if (scope.equals("body")) {
-				if (word.equals("ElseIf")) {
+				if (word.equals("elseif")) {
 					scope = "expression";
 					body.add(nextBody);
 					nextBody = "";
 				}
-				else if (word.equals("Else")) {
+				else if (word.equals("else")) {
 					body.add(nextBody);
 					nextBody = "";
 				}
@@ -103,52 +72,76 @@ public class VBS {
 		words.cutFirst();
 	}
 
-	private static Lexemes parse(Words words) {
-		Lexemes lexemes = new Lexemes();
-		
-		String word = words.cutFirst();
+	public static List<ILexeme> parse(Words words) {
+		String unknown = "";
+		List<ILexeme> lexemes = new ArrayList<ILexeme>();
+
+		IWord word = words.cutFirst();
 
 		while (word != null) {
-			if ("Public".equals(word)) {
+			if (word.equals(new ru.zainutdinov.vbs2js.word.Public())) {
+				if (!unknown.isEmpty()) {
+					lexemes.add(new Unknown(unknown));
+					unknown = "";
+				}
+
 				lexemes.add(new Public());
 			}
-			if ("Private".equals(word)) {
+			else if (word.equals(new ru.zainutdinov.vbs2js.word.Private())) {
+				if (!unknown.isEmpty()) {
+					lexemes.add(new Unknown(unknown));
+					unknown = "";
+				}
+
 				lexemes.add(new Private());
-			} else if ("Sub".equals(word)) {
-				String name = words.cutFirst();
+			}
+			else if (word.equals(new ru.zainutdinov.vbs2js.word.Sub())) {
+				if (!unknown.isEmpty()) {
+					lexemes.add(new Unknown(unknown));
+					unknown = "";
+				}
+
+				IWord name = words.cutFirst();
 				String parameters = extractParameters(words);
-				String body = extractBody(words, "Sub");
-				// TODO optimize conversion words -> string -> words
-				// TODO call new parse recursively
-				Lexemes lexemes1 = new Lexemes();
-				lexemes1.add(new Unknown(body));
-				lexemes.add(new Sub(name, parameters, lexemes1));			
-			} else if ("Function".equals(word)) {
-				String name = words.cutFirst();
+				// TODO: optimize conversion words -> string -> words
+				Words body = new Words(extractBody(words, "sub"));
+				lexemes.add(new Sub(name.js(), parameters, parse(body)));			
+			}
+			else if (word.equals(new ru.zainutdinov.vbs2js.word.Function())) {
+				if (!unknown.isEmpty()) {
+					lexemes.add(new Unknown(unknown));
+					unknown = "";
+				}
+
+				IWord name = words.cutFirst();
 				String parameters = extractParameters(words);
-				String body = extractBody(words, "Function");
-				body = replaceReturn(name, body);
-				lexemes.add(new Function(name, parameters, body));			
-			} else if ("If".equals(word)) {
+				String body = extractBody(words, "function");
+				body = replaceReturn(name.js(), body);
+				// 
+				lexemes.add(new Function(name.js(), parameters, parse(new Words(body))));
+			}
+			else if (word.equals(new ru.zainutdinov.vbs2js.word.If())) {
+				if (!unknown.isEmpty()) {
+					lexemes.add(new Unknown(unknown));
+					unknown = "";
+				}
+
 				List<String> expression = new ArrayList<String>();
 				List<String> body = new ArrayList<String>();
 				extractIf(words, expression, body);
 				lexemes.add(new If(expression, body));
 			}
+			else {
+				unknown += word;
+			}
 			
 			word = words.cutFirst();
 		}
 
-		return lexemes;
-	}
-	
-	public VBS(String code) {
-		Words words = new Words(code);
+		if (!unknown.isEmpty()) {
+			lexemes.add(new Unknown(unknown));
+		}
 
-		lexemes = parse(words);
-	}
-
-	public Lexemes lexemes() {
 		return lexemes;
 	}
 }

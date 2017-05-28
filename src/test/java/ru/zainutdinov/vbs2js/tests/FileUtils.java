@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 
-public class FileUtilities {
+public class FileUtils {
 
 	private static String convertStreamToString(InputStream is) throws Exception {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -25,7 +25,7 @@ public class FileUtilities {
 		String ret = new String();
 
 		try {
-			File fl = new File(new FileUtilities().getClass().getClassLoader().getResource(filePath).toURI());
+			File fl = new File(new FileUtils().getClass().getClassLoader().getResource(filePath).toURI());
 			FileInputStream fin = new FileInputStream(fl);
 			ret = convertStreamToString(fin);
 			fin.close();

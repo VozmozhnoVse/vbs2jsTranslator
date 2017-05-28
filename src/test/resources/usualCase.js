@@ -3,7 +3,7 @@ function SubName() {
 }
 
 function FunctionName(Parameter) {
-	if (Parameter Is Nothing) {
+	if (Parameter) {
 		return false;
 	}
 	else {

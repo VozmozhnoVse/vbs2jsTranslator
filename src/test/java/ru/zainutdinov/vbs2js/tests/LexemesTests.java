@@ -1,96 +1,232 @@
 package ru.zainutdinov.vbs2js.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import ru.zainutdinov.vbs2js.Lexemes;
 import ru.zainutdinov.vbs2js.lexeme.Function;
+import ru.zainutdinov.vbs2js.lexeme.ILexeme;
 import ru.zainutdinov.vbs2js.lexeme.Private;
 import ru.zainutdinov.vbs2js.lexeme.Public;
 import ru.zainutdinov.vbs2js.lexeme.Sub;
+import ru.zainutdinov.vbs2js.lexeme.Unknown;
+import ru.zainutdinov.vbs2js.word.Comma;
+import ru.zainutdinov.vbs2js.word.IWord;
+import ru.zainutdinov.vbs2js.word.ParenthesisClose;
+import ru.zainutdinov.vbs2js.word.ParenthesisOpen;
 
 public class LexemesTests {
 
 	@Test
-	public void test() {
-		Lexemes actual = new Lexemes();
-		actual.add(new Public());
-		actual.add(new Sub("Main", "", null));
+	public void test_Unknown() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("sometext"));
 
-		Lexemes expected = new Lexemes();
-		expected.add(new Public());
-		expected.add(new Sub("Main", "", null));
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
 
-		Assert.assertEquals(expected, actual);
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(Unknown.class, lexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> lexemeWords = ((Unknown)lexeme).getWords();
+		Assert.assertEquals(1, lexemeWords.size());
+		Assert.assertEquals("sometext", lexemeWords.get(0).getText());
 	}
 
 	@Test
-	public void testJS_SubWithPublic() {
-		Lexemes lexemes = new Lexemes();
+	public void test_PublicPrivate() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Public());
+		words.add(new ru.zainutdinov.vbs2js.word.Private());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(2, lexemes.size());
+		Assert.assertEquals(Public.class, lexemes.get(0).getClass());
+		Assert.assertEquals(Private.class, lexemes.get(1).getClass());
+	}
+
+	@Test
+	public void test_Sub() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Sub());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(Sub.class, lexeme.getClass());
+
+		ru.zainutdinov.vbs2js.word.Unknown name = ((Sub)lexeme).getName();
+		Assert.assertEquals("SubName", name.getText());
+	}
+
+	@Test
+	public void test_TwoSubs() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Sub());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName1"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
+		words.add(new ru.zainutdinov.vbs2js.word.Sub());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName2"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(2, lexemes.size());
+
+		ILexeme lexeme1 = lexemes.get(0);
+		ILexeme lexeme2 = lexemes.get(1);
+		Assert.assertEquals(Sub.class, lexeme1.getClass());
+		Assert.assertEquals(Sub.class, lexeme2.getClass());
+
+		ru.zainutdinov.vbs2js.word.Unknown name1 = ((Sub)lexeme1).getName();
+		ru.zainutdinov.vbs2js.word.Unknown name2 = ((Sub)lexeme2).getName();
+		Assert.assertEquals("SubName1", name1.getText());
+		Assert.assertEquals("SubName2", name2.getText());
+	}
+
+	@Test
+	public void test_SubWithParametersAndBody() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Sub());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter1"));
+		words.add(new ru.zainutdinov.vbs2js.word.Comma());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter2"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(Sub.class, lexeme.getClass());
+
+		ru.zainutdinov.vbs2js.word.Unknown name = ((Sub)lexeme).getName();
+		Assert.assertEquals("SubName", name.getText());
+
+		List<IWord> parameters = ((Sub)lexeme).getParameters();
+		Assert.assertEquals(5, parameters.size());
+		Assert.assertEquals(ParenthesisOpen.class, parameters.get(0).getClass());
+		Assert.assertEquals("Parameter1", ((ru.zainutdinov.vbs2js.word.Unknown)parameters.get(1)).getText());
+		Assert.assertEquals(Comma.class, parameters.get(2).getClass());
+		Assert.assertEquals("Parameter2", ((ru.zainutdinov.vbs2js.word.Unknown)parameters.get(3)).getText());
+		Assert.assertEquals(ParenthesisClose.class, parameters.get(4).getClass());
+
+		List<ILexeme> body = ((Sub)lexeme).getBody();
+		Assert.assertEquals(1, body.size());
+
+		ILexeme bodyLexeme = body.get(0);
+		Assert.assertEquals(Unknown.class, bodyLexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> lexemeWords = ((Unknown)bodyLexeme).getWords();
+		Assert.assertEquals(1, lexemeWords.size());
+		Assert.assertEquals("Body", lexemeWords.get(0).getText());
+	}
+
+	@Test
+	public void test_Function() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Function());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName"));
+		words.add(new ru.zainutdinov.vbs2js.word.Return());
+		words.add(new ru.zainutdinov.vbs2js.word.True());
+		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(Function.class, lexeme.getClass());
+
+		ru.zainutdinov.vbs2js.word.Unknown name = ((Function)lexeme).getName();
+		Assert.assertEquals("FunctionName", name.getText());
+	}
+
+	@Test
+	public void test_TwoFunctions() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Function());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName1"));
+		words.add(new ru.zainutdinov.vbs2js.word.Return());
+		words.add(new ru.zainutdinov.vbs2js.word.True());
+		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
+		words.add(new ru.zainutdinov.vbs2js.word.Function());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName2"));
+		words.add(new ru.zainutdinov.vbs2js.word.Return());
+		words.add(new ru.zainutdinov.vbs2js.word.False());
+		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(2, lexemes.size());
+
+		ILexeme lexeme1 = lexemes.get(0);
+		ILexeme lexeme2 = lexemes.get(1);
+		Assert.assertEquals(Function.class, lexeme1.getClass());
+		Assert.assertEquals(Function.class, lexeme2.getClass());
+
+		ru.zainutdinov.vbs2js.word.Unknown name1 = ((Function)lexeme1).getName();
+		ru.zainutdinov.vbs2js.word.Unknown name2 = ((Function)lexeme2).getName();
+		Assert.assertEquals("FunctionName1", name1.getText());
+		Assert.assertEquals("FunctionName2", name2.getText());
+	}
+
+	@Test
+	public void test_FunctionWithParametersAndBody() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.Function());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter1"));
+		words.add(new ru.zainutdinov.vbs2js.word.Comma());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter2"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
+		words.add(new ru.zainutdinov.vbs2js.word.Return());
+		words.add(new ru.zainutdinov.vbs2js.word.True());
+		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
+
 		
-		lexemes.add(new Public());
-		lexemes.add(new Sub("Main", "", null));
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
 
-		Assert.assertEquals("function Main() {\n}\n", lexemes.js(0));
-	}
+		Assert.assertEquals(1, lexemes.size());
 
-	@Test
-	public void testJS_SubWithPrivate() {
-		Lexemes lexemes = new Lexemes();
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(Function.class, lexeme.getClass());
 
-		lexemes.add(new Private());
-		lexemes.add(new Sub("Main", "", null));
+		ru.zainutdinov.vbs2js.word.Unknown name = ((Function)lexeme).getName();
+		Assert.assertEquals("FunctionName", name.getText());
 
-		Assert.assertEquals("function Main() {\n}\n", lexemes.js(0));
-	}
+		List<IWord> parameters = ((Function)lexeme).getParameters();
+		Assert.assertEquals(5, parameters.size());
+		Assert.assertEquals(ParenthesisOpen.class, parameters.get(0).getClass());
+		Assert.assertEquals("Parameter1", ((ru.zainutdinov.vbs2js.word.Unknown)parameters.get(1)).getText());
+		Assert.assertEquals(Comma.class, parameters.get(2).getClass());
+		Assert.assertEquals("Parameter2", ((ru.zainutdinov.vbs2js.word.Unknown)parameters.get(3)).getText());
+		Assert.assertEquals(ParenthesisClose.class, parameters.get(4).getClass());
 
-	@Test
-	public void testJS_SubsTwo() {
-		Lexemes lexemes = new Lexemes();
 
-		lexemes.add(new Sub("Main1", "", null));
-		lexemes.add(new Sub("Main2", "", null));
+		List<ILexeme> body = ((Function)lexeme).getBody();
+		Assert.assertEquals(1, body.size());
 
-		Assert.assertEquals("function Main1() {\n}\nfunction Main2() {\n}\n", lexemes.js(0));
-	}
+		ILexeme bodyLexeme = body.get(0);
+		Assert.assertEquals(Unknown.class, bodyLexeme.getClass());
 
-	@Test
-	public void testJS_FunctionWithPublic() {
-		Lexemes lexemes = new Lexemes();
-		
-		lexemes.add(new Public());
-		lexemes.add(new Function("Main", "", "return true;"));
-
-		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", lexemes.js(0));
-	}
-
-	@Test
-	public void testJS_Tab() {
-		Lexemes lexemes = new Lexemes();
-		
-		lexemes.add(new Public());
-		lexemes.add(new Function("Main", "", "return true;"));
-
-		Assert.assertEquals("\tfunction Main() {\n\t\treturn true;\n\t}\n", lexemes.js(1));
-	}
-
-	@Test
-	public void testJS_FunctionWithPrivate() {
-		Lexemes lexemes = new Lexemes();
-
-		lexemes.add(new Private());
-		lexemes.add(new Function("Main", "", "return true;"));
-
-		Assert.assertEquals("function Main() {\n\treturn true;\n}\n", lexemes.js(0));
-	}
-
-	@Test
-	public void testJS_FunctionsTwo() {
-		Lexemes lexemes = new Lexemes();
-
-		lexemes.add(new Function("Main1", "", "return true;"));
-		lexemes.add(new Function("Main2", "", "return true;"));
-
-		Assert.assertEquals("function Main1() {\n\treturn true;\n}\nfunction Main2() {\n\treturn true;\n}\n", lexemes.js(0));
+		List<ru.zainutdinov.vbs2js.word.Unknown> lexemeWords = ((Unknown)bodyLexeme).getWords();
+		Assert.assertEquals(1, lexemeWords.size());
+		Assert.assertEquals("Body", lexemeWords.get(0).getText());
 	}
 }
