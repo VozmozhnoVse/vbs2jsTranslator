@@ -16,18 +16,24 @@ public class Sub implements ILexeme {
 		this.body = body;
 	}
 
-	// TODO: tests
 	@Override
 	public String js(int tabLevel) {
 		String tabs = StringUtils.repeat("\t", tabLevel);
 		String result = "";
-		
-		result += tabs + "function " + name.getText() + "(" + /*parameters + */") {\n";
-		/* TODO
 
-		result += body.js(tabLevel + 1);
-*/
-		result += tabs + "}\n";		
+		result += tabs + "function " + name.getText() + "(";
+
+		for (IWord word : parameters) {
+			result += word.js();			
+		}
+
+		result += ") {\n";
+
+		for (ILexeme lexeme : body) {
+			result += lexeme.js(tabLevel + 1);
+		}
+
+		result += tabs + "}\n";
 
 		return result;
 	}
@@ -43,15 +49,4 @@ public class Sub implements ILexeme {
 	public List<ILexeme> getBody() {
 		return body;
 	}
-	/* TODO
-	@Override
-	public boolean equals(Object obj) {
-		if (obj.getClass() != Sub.class) {
-			return false;
-		}
-
-		Sub sub = (Sub) obj;
-		
-		return name.equals(sub.name) && parameters.equals(sub.parameters) && body.equals(sub.body);
-	} */
 }
