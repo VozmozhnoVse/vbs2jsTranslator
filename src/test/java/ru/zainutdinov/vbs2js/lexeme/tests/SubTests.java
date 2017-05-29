@@ -27,5 +27,6 @@ public class SubTests {
 		Sub sub = new Sub(name, parameters, body);
 
 		Assert.assertEquals("function SubName(Parameter1, Parameter2) {\n\tSomething\n}\n", sub.js(0));
+		Assert.assertEquals("\tfunction SubName(Parameter1, Parameter2) {\n\t\tSomething\n\t}\n", sub.js(1));
 	}
 }

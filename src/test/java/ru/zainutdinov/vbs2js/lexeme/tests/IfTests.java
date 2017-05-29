@@ -96,5 +96,6 @@ public class IfTests {
 		If if_ = new If(expression, body);
 
 		Assert.assertEquals("if (true) {\n\tsomething1\n}\nelse if (false) {\n\tsomething2\n}\nelse {\n\tsomething3\n}\n", if_.js(0));
+		Assert.assertEquals("\tif (true) {\n\t\tsomething1\n\t}\n\telse if (false) {\n\t\tsomething2\n\t}\n\telse {\n\t\tsomething3\n\t}\n", if_.js(1));
 	}
 }

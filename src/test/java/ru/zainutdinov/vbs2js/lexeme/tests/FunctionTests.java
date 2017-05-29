@@ -27,5 +27,6 @@ public class FunctionTests {
 		Function function = new Function(name, parameters, body);
 
 		Assert.assertEquals("function FunctionName(Parameter1, Parameter2) {\n\tSomething\n}\n", function.js(0));
+		Assert.assertEquals("\tfunction FunctionName(Parameter1, Parameter2) {\n\t\tSomething\n\t}\n", function.js(1));
 	}
 }
