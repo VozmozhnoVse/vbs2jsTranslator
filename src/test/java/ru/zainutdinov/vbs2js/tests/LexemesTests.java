@@ -9,16 +9,15 @@ import org.junit.Test;
 import ru.zainutdinov.vbs2js.Lexemes;
 import ru.zainutdinov.vbs2js.lexeme.Function;
 import ru.zainutdinov.vbs2js.lexeme.ILexeme;
+import ru.zainutdinov.vbs2js.lexeme.If;
 import ru.zainutdinov.vbs2js.lexeme.Private;
 import ru.zainutdinov.vbs2js.lexeme.Public;
 import ru.zainutdinov.vbs2js.lexeme.Sub;
 import ru.zainutdinov.vbs2js.lexeme.Unknown;
 import ru.zainutdinov.vbs2js.word.Comma;
-import ru.zainutdinov.vbs2js.word.False;
 import ru.zainutdinov.vbs2js.word.IWord;
 import ru.zainutdinov.vbs2js.word.ParenthesisClose;
 import ru.zainutdinov.vbs2js.word.ParenthesisOpen;
-import ru.zainutdinov.vbs2js.word.True;
 
 public class LexemesTests {
 
@@ -227,7 +226,6 @@ public class LexemesTests {
 		Assert.assertEquals("Parameter2", ((ru.zainutdinov.vbs2js.word.Unknown)parameters.get(3)).getText());
 		Assert.assertEquals(ParenthesisClose.class, parameters.get(4).getClass());
 
-
 		List<ILexeme> body = ((Function)lexeme).getBody();
 		Assert.assertEquals(1, body.size());
 
@@ -237,5 +235,156 @@ public class LexemesTests {
 		List<ru.zainutdinov.vbs2js.word.Unknown> lexemeWords = ((Unknown)bodyLexeme).getWords();
 		Assert.assertEquals(1, lexemeWords.size());
 		Assert.assertEquals("Body", lexemeWords.get(0).getText());
+	}
+
+	@Test
+	public void test_If() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.If());
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
+		words.add(new ru.zainutdinov.vbs2js.word.Then());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndIf());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(If.class, lexeme.getClass());
+
+		List<IWord> expression = ((If)lexeme).getExpression(0);
+		Assert.assertEquals(3, expression.size());
+		Assert.assertEquals(ParenthesisOpen.class, expression.get(0).getClass());
+		Assert.assertEquals("Expression", ((ru.zainutdinov.vbs2js.word.Unknown)expression.get(1)).getText());
+		Assert.assertEquals(ParenthesisClose.class, expression.get(2).getClass());
+		
+		List<ILexeme> body = ((If)lexeme).getBody(0);
+		Assert.assertEquals(1, body.size());
+
+		ILexeme bodyLexeme = body.get(0);
+		Assert.assertEquals(Unknown.class, bodyLexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> lexemeWords = ((Unknown)bodyLexeme).getWords();
+		Assert.assertEquals(1, lexemeWords.size());
+		Assert.assertEquals("Body", lexemeWords.get(0).getText());
+	}
+
+	@Test
+	public void test_IfElse() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.If());
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
+		words.add(new ru.zainutdinov.vbs2js.word.Then());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body1"));
+		words.add(new ru.zainutdinov.vbs2js.word.Else());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body2"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndIf());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(If.class, lexeme.getClass());
+
+		List<IWord> expression = ((If)lexeme).getExpression(0);
+		Assert.assertEquals(3, expression.size());
+		Assert.assertEquals(ParenthesisOpen.class, expression.get(0).getClass());
+		Assert.assertEquals("Expression", ((ru.zainutdinov.vbs2js.word.Unknown)expression.get(1)).getText());
+		Assert.assertEquals(ParenthesisClose.class, expression.get(2).getClass());
+
+		List<ILexeme> body1 = ((If)lexeme).getBody(0);
+		Assert.assertEquals(1, body1.size());
+
+		ILexeme body1Lexeme = body1.get(0);
+		Assert.assertEquals(Unknown.class, body1Lexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> body1LexemeWords = ((Unknown)body1Lexeme).getWords();
+		Assert.assertEquals(1, body1LexemeWords.size());
+		Assert.assertEquals("Body1", body1LexemeWords.get(0).getText());
+
+		List<ILexeme> body2 = ((If)lexeme).getBody(1);
+		Assert.assertEquals(1, body2.size());
+
+		ILexeme body2Lexeme = body2.get(0);
+		Assert.assertEquals(Unknown.class, body2Lexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> body2LexemeWords = ((Unknown)body2Lexeme).getWords();
+		Assert.assertEquals(1, body2LexemeWords.size());
+		Assert.assertEquals("Body2", body2LexemeWords.get(0).getText());
+	}
+
+	@Test
+	public void test_IfElseIfElse() {
+		List<IWord> words = new ArrayList<IWord>();
+		words.add(new ru.zainutdinov.vbs2js.word.If());
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression1"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
+		words.add(new ru.zainutdinov.vbs2js.word.Then());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body1"));
+		words.add(new ru.zainutdinov.vbs2js.word.ElseIf());
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression2"));
+		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
+		words.add(new ru.zainutdinov.vbs2js.word.Then());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body2"));
+		words.add(new ru.zainutdinov.vbs2js.word.Else());
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body3"));
+		words.add(new ru.zainutdinov.vbs2js.word.EndIf());
+
+		List<ILexeme> lexemes = new Lexemes(words).getLexemes();
+
+		Assert.assertEquals(1, lexemes.size());
+
+		ILexeme lexeme = lexemes.get(0);
+		Assert.assertEquals(If.class, lexeme.getClass());
+
+		List<IWord> expression1 = ((If)lexeme).getExpression(0);
+		Assert.assertEquals(3, expression1.size());
+		Assert.assertEquals(ParenthesisOpen.class, expression1.get(0).getClass());
+		Assert.assertEquals("Expression1", ((ru.zainutdinov.vbs2js.word.Unknown)expression1.get(1)).getText());
+		Assert.assertEquals(ParenthesisClose.class, expression1.get(2).getClass());
+
+		List<IWord> expression2 = ((If)lexeme).getExpression(1);
+		Assert.assertEquals(3, expression2.size());
+		Assert.assertEquals(ParenthesisOpen.class, expression2.get(0).getClass());
+		Assert.assertEquals("Expression2", ((ru.zainutdinov.vbs2js.word.Unknown)expression2.get(1)).getText());
+		Assert.assertEquals(ParenthesisClose.class, expression2.get(2).getClass());
+
+		List<ILexeme> body1 = ((If)lexeme).getBody(0);
+		Assert.assertEquals(1, body1.size());
+
+		ILexeme body1Lexeme = body1.get(0);
+		Assert.assertEquals(Unknown.class, body1Lexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> body1LexemeWords = ((Unknown)body1Lexeme).getWords();
+		Assert.assertEquals(1, body1LexemeWords.size());
+		Assert.assertEquals("Body1", body1LexemeWords.get(0).getText());
+
+		List<ILexeme> body2 = ((If)lexeme).getBody(1);
+		Assert.assertEquals(1, body2.size());
+
+		ILexeme body2Lexeme = body2.get(0);
+		Assert.assertEquals(Unknown.class, body2Lexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> body2LexemeWords = ((Unknown)body2Lexeme).getWords();
+		Assert.assertEquals(1, body2LexemeWords.size());
+		Assert.assertEquals("Body2", body2LexemeWords.get(0).getText());
+
+		List<ILexeme> body3 = ((If)lexeme).getBody(2);
+		Assert.assertEquals(1, body3.size());
+
+		ILexeme body3Lexeme = body3.get(0);
+		Assert.assertEquals(Unknown.class, body3Lexeme.getClass());
+
+		List<ru.zainutdinov.vbs2js.word.Unknown> body3LexemeWords = ((Unknown)body3Lexeme).getWords();
+		Assert.assertEquals(1, body3LexemeWords.size());
+		Assert.assertEquals("Body3", body3LexemeWords.get(0).getText());
 	}
 }

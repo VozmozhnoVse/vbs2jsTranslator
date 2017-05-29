@@ -2,22 +2,30 @@ package ru.zainutdinov.vbs2js.lexeme;
 
 import java.util.List;
 
-import ru.zainutdinov.vbs2js.StringUtils;
+import ru.zainutdinov.vbs2js.word.IWord;
 
 public class If implements ILexeme {
-	List<String> expression;
-	List<String> body;
+	List<List<IWord>> expression;
+	List<List<ILexeme>> body;
 	
-	public If(List<String> expression, List<String> body) {
+	public If(List<List<IWord>> expression, List<List<ILexeme>> body) {
 		this.expression = expression;
 		this.body = body;
 	}
 
+	public List<IWord> getExpression(int i) {
+		return expression.get(i);
+	}
+
+	public List<ILexeme> getBody(int i) {
+		return body.get(i);
+	}
+	
 	@Override
 	public String js(int tabLevel) {
-		String tabs = StringUtils.repeat("\t", tabLevel);
+//		String tabs = StringUtils.repeat("\t", tabLevel);
 		String result = new String();
-
+/* TODO
 		int i = 0;
 		for (; i < expression.size(); i++) {
 		
@@ -44,11 +52,11 @@ public class If implements ILexeme {
 		}
 
 		result += tabs + "}\n";
-		
+		*/
 		return result;
 	}
 
-	@Override
+	/* TODO @Override
 	public boolean equals(Object obj) {
 		if (obj.getClass() != If.class) {
 			return false;
@@ -58,5 +66,5 @@ public class If implements ILexeme {
 
 		return expression.equals(if_.expression) && body.equals(if_.body);
 		//return js().equals(if_.js());
-	}
+	}*/
 }

@@ -5,15 +5,20 @@ import java.util.List;
 
 import ru.zainutdinov.vbs2js.lexeme.Function;
 import ru.zainutdinov.vbs2js.lexeme.ILexeme;
+import ru.zainutdinov.vbs2js.lexeme.If;
 import ru.zainutdinov.vbs2js.lexeme.Private;
 import ru.zainutdinov.vbs2js.lexeme.Public;
 import ru.zainutdinov.vbs2js.lexeme.Sub;
 import ru.zainutdinov.vbs2js.lexeme.Unknown;
+import ru.zainutdinov.vbs2js.word.Else;
+import ru.zainutdinov.vbs2js.word.ElseIf;
 import ru.zainutdinov.vbs2js.word.EndFunction;
+import ru.zainutdinov.vbs2js.word.EndIf;
 import ru.zainutdinov.vbs2js.word.EndSub;
 import ru.zainutdinov.vbs2js.word.IWord;
 import ru.zainutdinov.vbs2js.word.ParenthesisClose;
 import ru.zainutdinov.vbs2js.word.ParenthesisOpen;
+import ru.zainutdinov.vbs2js.word.Then;
 
 public class Lexemes {
 
@@ -61,6 +66,47 @@ public class Lexemes {
 		}
 
 		return result;
+	}
+
+	private static void extractIf(List<IWord> words, List<List<IWord>> expression, List<List<ILexeme>> body) {
+		String scope = "expression";
+		List<IWord> nextExpression = new ArrayList<IWord>();
+		List<IWord> nextBody = new ArrayList<IWord>();
+
+		IWord word = words.remove(0);
+		while (!word.getClass().equals(EndIf.class)) {
+			if (scope.equals("expression")) {
+				if (word.getClass().equals(Then.class)) {
+					scope = "body";
+					expression.add(new ArrayList<IWord>(nextExpression));
+					nextExpression.clear();
+					word = words.remove(0);
+				}
+				else {
+					nextExpression.add(word);
+					word = words.remove(0);
+				}
+			}
+			else if (scope.equals("body")) {
+				if (word.getClass().equals(Else.class)) {
+					body.add(parse(nextBody));
+					nextBody.clear();
+					word = words.remove(0);
+				}
+				else if (word.getClass().equals(ElseIf.class)) {
+					scope = "expression";
+					body.add(parse(nextBody));
+					nextBody.clear();
+					word = words.remove(0);
+				}
+				else {
+					nextBody.add(word);
+					word = words.remove(0);
+				}
+			}
+		}
+
+		body.add(parse(nextBody));
 	}
 
 	private static List<ILexeme> parse(List<IWord> words) {
@@ -128,6 +174,12 @@ public class Lexemes {
 				List<IWord> parameters = extractParameters(words);
 				List<ILexeme> body = parse(extractBodyFunction(words));
 				result.add(new Function(name, parameters, body));
+			}
+			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
+				List<List<IWord>> expression = new ArrayList<List<IWord>>();
+				List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
+				extractIf(words, expression, body);
+				result.add(new If(expression, body));
 			}
 			else {
 				// TODO: test for new IWord
