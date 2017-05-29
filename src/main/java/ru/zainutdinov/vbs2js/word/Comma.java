@@ -4,7 +4,6 @@ public class Comma implements IWord {
 
 	@Override
 	public String js() {
-		return null;
-		//TODO return ", ";
+		return ", ";
 	}
 }

@@ -8,13 +8,13 @@ public class Unknown implements IWord {
 		this.text = text;
 	}
 
+	// TODO: delete?
 	public String getText() {
 		return text;
 	}
 
 	@Override
 	public String js() {
-		// TODO Auto-generated method stub
-		return null;
+		return text;
 	}
 }

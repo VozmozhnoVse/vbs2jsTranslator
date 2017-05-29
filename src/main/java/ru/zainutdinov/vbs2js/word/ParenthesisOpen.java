@@ -4,6 +4,6 @@ public class ParenthesisOpen implements IWord {
 
 	@Override
 	public String js() {
-		return null; // TODO "(";
+		return "(";
 	}
 }
