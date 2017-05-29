@@ -2,5 +2,9 @@ package ru.zainutdinov.vbs2js.word;
 
 public class Comma implements IWord {
 
-//		return ", ";
+	@Override
+	public String js() {
+		return null;
+		//TODO return ", ";
+	}
 }

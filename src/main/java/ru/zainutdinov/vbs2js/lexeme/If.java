@@ -2,6 +2,7 @@ package ru.zainutdinov.vbs2js.lexeme;
 
 import java.util.List;
 
+import ru.zainutdinov.vbs2js.StringUtils;
 import ru.zainutdinov.vbs2js.word.IWord;
 
 public class If implements ILexeme {
@@ -23,48 +24,47 @@ public class If implements ILexeme {
 	
 	@Override
 	public String js(int tabLevel) {
-//		String tabs = StringUtils.repeat("\t", tabLevel);
-		String result = new String();
-/* TODO
-		int i = 0;
-		for (; i < expression.size(); i++) {
-		
-			result += tabs;
+		String tabs = StringUtils.repeat("\t", tabLevel);
+		String result = "";
 
-			if (i > 0) {
-				result += "} else ";
+		int j = 0;
+		for (; j < expression.size(); j++) {
+			if (j > 0) {
+				result += tabs + "else if (";
 			}
-			
-			result += "if " + expression.get(i) + " {\n";
-			
-			if (!body.get(i).isEmpty()) {
-				// TODO body.js(tabLevel + 1)
-				result += tabs + "\t" + body.get(i) + "\n";
+			else {
+				result += tabs + "if (";
 			}
+
+			List<IWord> currentExpression = expression.get(j);
+			for (int i = 0; i < currentExpression.size(); i++) {
+				IWord currentWord = currentExpression.get(i);
+				result += currentWord.js();
+			}
+	
+			result += ") {\n";
+	
+			List<ILexeme> currentBody = body.get(j);
+	
+			for (int i = 0; i < currentBody.size(); i++) {
+				result += currentBody.get(i).js(tabLevel + 1);
+			}
+
+			result += tabs + "}\n";
 		}
 
-		if (body.size() > i) {
-			if (!body.get(i).isEmpty()) {
-				result += tabs + "} else {\n";
-				// TODO body.js(tabLevel + 1)
-				result += tabs + "\t" + body.get(i) + "\n";
+		if (body.size() > j) {
+			result += tabs + "else {\n";
+
+			List<ILexeme> currentBody = body.get(j);
+			
+			for (int i = 0; i < currentBody.size(); i++) {
+				result += currentBody.get(i).js(tabLevel + 1);
 			}
+
+			result += tabs + "}\n";
 		}
 
-		result += tabs + "}\n";
-		*/
 		return result;
 	}
-
-	/* TODO @Override
-	public boolean equals(Object obj) {
-		if (obj.getClass() != If.class) {
-			return false;
-		}
-
-		If if_ = (If)obj;
-
-		return expression.equals(if_.expression) && body.equals(if_.body);
-		//return js().equals(if_.js());
-	}*/
 }

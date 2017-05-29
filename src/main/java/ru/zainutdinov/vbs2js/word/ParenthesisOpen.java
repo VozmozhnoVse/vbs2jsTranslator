@@ -1,5 +1,9 @@
 package ru.zainutdinov.vbs2js.word;
 
 public class ParenthesisOpen implements IWord {
-//		return "(";
+
+	@Override
+	public String js() {
+		return null; // TODO "(";
+	}
 }
