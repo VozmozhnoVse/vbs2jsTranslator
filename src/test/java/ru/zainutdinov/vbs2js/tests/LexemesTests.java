@@ -1,19 +1,16 @@
 package ru.zainutdinov.vbs2js.tests;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import ru.zainutdinov.vbs2js.Lexemes;
-import ru.zainutdinov.vbs2js.word.IWord;
+import ru.zainutdinov.vbs2js.Words;
 
 public class LexemesTests {
 
 	@Test
 	public void testJS_Unknown() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("sometext"));
 
 		String js = new Lexemes(words).js();
@@ -23,7 +20,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_PublicPrivateReturnTrueFalse() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Public());
 		words.add(new ru.zainutdinov.vbs2js.word.Private());
 		words.add(new ru.zainutdinov.vbs2js.word.True());
@@ -36,7 +33,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_Sub() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Sub());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
@@ -48,7 +45,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_TwoSubs() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Sub());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName1"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
@@ -63,7 +60,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_SubWithParametersAndBody() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Sub());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName"));
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
@@ -81,7 +78,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_Function() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Function());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
@@ -93,7 +90,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_TwoFunctions() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Function());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName1"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
@@ -108,7 +105,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_FunctionWithParametersAndBody() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Function());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName"));
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
@@ -126,7 +123,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_If() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.If());
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
@@ -142,7 +139,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_IfElse() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.If());
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
@@ -160,7 +157,7 @@ public class LexemesTests {
 
 	@Test
 	public void testJS_IfElseIfElse() {
-		List<IWord> words = new ArrayList<IWord>();
+		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.If());
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression1"));

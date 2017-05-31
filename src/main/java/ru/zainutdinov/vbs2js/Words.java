@@ -33,7 +33,7 @@ public class Words {
 
 		for (int i = 0; i < strings.length; i++) {
 			String string = strings[i].trim();
-			
+
 			if (!string.isEmpty()) {
 				result.add(string);
 			}
@@ -41,7 +41,7 @@ public class Words {
 
 		return result;
 	}
-	
+
 	public Words(String vbs) {
 		List<String> strings = split(vbs);
 
@@ -51,77 +51,57 @@ public class Words {
 
 			if (string.equals(",")) {
 				word = new Comma();
-			}
-			else if (string.equals("(")) {
+			} else if (string.equals("(")) {
 				word = new ParenthesisOpen();
-			}
-			else if (string.equals(")")) {
+			} else if (string.equals(")")) {
 				word = new ParenthesisClose();
-			}
-			else if (string.equalsIgnoreCase("private")) {
+			} else if (string.equalsIgnoreCase("private")) {
 				word = new Private();
-			}
-			else if (string.equalsIgnoreCase("public")) {
+			} else if (string.equalsIgnoreCase("public")) {
 				word = new Public();
-			}
-			else if (string.equalsIgnoreCase("sub")) {
+			} else if (string.equalsIgnoreCase("sub")) {
 				word = new Sub();
-			}
-			else if (string.equalsIgnoreCase("function")) {
+			} else if (string.equalsIgnoreCase("function")) {
 				word = new Function();
-			}
-			else if (string.equalsIgnoreCase("if")) {
+			} else if (string.equalsIgnoreCase("if")) {
 				word = new If();
-			}
-			else if (string.equalsIgnoreCase("then")) {
+			} else if (string.equalsIgnoreCase("then")) {
 				word = new Then();
-			}
-			else if (string.equalsIgnoreCase("elseif")) {
+			} else if (string.equalsIgnoreCase("elseif")) {
 				word = new ElseIf();
-			}
-			else if (string.equalsIgnoreCase("else")) {
+			} else if (string.equalsIgnoreCase("else")) {
 				String nextString = strings.get(i + 1).trim();
 
 				if (nextString.equalsIgnoreCase("if")) {
 					word = new ElseIf();
 					i++;
-				}
-				else {
+				} else {
 					word = new Else();
 				}
-			}
-			else if (string.equalsIgnoreCase("endif")) {
+			} else if (string.equalsIgnoreCase("endif")) {
 				word = new EndIf();
-			}
-			else if (string.equalsIgnoreCase("end")) {
+			} else if (string.equalsIgnoreCase("end")) {
 				String nextString = strings.get(i + 1).trim();
 
 				if (nextString.equalsIgnoreCase("sub")) {
 					word = new EndSub();
 					i++;
-				}
-				else if (nextString.equalsIgnoreCase("function")) {
+				} else if (nextString.equalsIgnoreCase("function")) {
 					word = new EndFunction();
 					i++;
-				}
-				else if (nextString.equalsIgnoreCase("if")) {
+				} else if (nextString.equalsIgnoreCase("if")) {
 					word = new EndIf();
 					i++;
-				}
-				else {
+				} else {
 					word = new Unknown(string);
 				}
-			}
-			else if (string.equalsIgnoreCase("return")) {
+			} else if (string.equalsIgnoreCase("return")) {
 				word = new Return();
-			}
-			else if (string.equalsIgnoreCase("false")) {
+			} else if (string.equalsIgnoreCase("false")) {
 				word = new False();
-			}
-			else if (string.equalsIgnoreCase("true")) {
+			} else if (string.equalsIgnoreCase("true")) {
 				word = new True();
-			}
-			else {
+			} else {
 				word = new Unknown(string);
 			}
 
@@ -129,7 +109,62 @@ public class Words {
 		}
 	}
 
-	public List<IWord> getWords() {
-		return words;
+	public IWord cutFirst() {
+		if (words.isEmpty()) {
+			return null;
+		}
+
+		return words.remove(0);
+	}
+
+	public boolean checkFirstClass(Class<?> class_) {
+		return words.get(0).getClass().equals(class_);
+	}
+
+	public boolean isEmpty() {
+		return words.isEmpty();
+	}
+
+	public Words cutToExclusive(Class<?> class_) {
+		Words result = new Words("");
+
+		IWord word = cutFirst();
+
+		while (!word.getClass().equals(class_)) {
+			result.words.add(word);
+			word = cutFirst();
+		}
+
+		return result;
+	}
+
+	public Words cutToInclusive(Class<?> class_) {
+		Words result = new Words("");
+		IWord word;
+
+		do {
+			word = cutFirst();
+			result.words.add(word);
+		} while (!word.getClass().equals(class_));
+
+		return result;
+	}
+
+	public String js() {
+		String result = "";
+
+		for (IWord word : words) {
+			result += word.js();
+		}
+
+		return result;
+	}
+
+	public void clear() {
+		words.clear();
+	}
+
+	public void add(IWord word) {
+		words.add(word);
 	}
 }

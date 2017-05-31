@@ -24,84 +24,52 @@ public class Lexemes {
 
 	private List<ILexeme> lexemes = new ArrayList<ILexeme>();
 
-	private static List<IWord> extractParameters(List<IWord> words) {
-		List<IWord> result = new ArrayList<IWord>();
-
-		if (!words.get(0).getClass().equals(ParenthesisOpen.class)) {
-			return result;
+	private static Words extractParameters(Words words) {
+		if (!words.checkFirstClass(ParenthesisOpen.class)) {
+			return new Words("");
 		}
 
-		IWord word;
-
-		do {
-			word = words.remove(0);
-			result.add(word);
-		}
-		while (!word.getClass().equals(ParenthesisClose.class));
-
-		return result;
+		return words.cutToInclusive(ParenthesisClose.class);
 	}
 
-	private static List<IWord> extractBodySub(List<IWord> words) {
-		List<IWord> result = new ArrayList<IWord>();
-
-		IWord word = words.remove(0);
-
-		while (!word.getClass().equals(EndSub.class)) {
-			result.add(word);
-			word = words.remove(0);
-		}
-
-		return result;
+	private static Words extractBodySub(Words words) {
+		return words.cutToExclusive(EndSub.class);
 	}
 
-	private static List<IWord> extractBodyFunction(List<IWord> words) {
-		List<IWord> result = new ArrayList<IWord>();
-
-		IWord word = words.remove(0);
-
-		while (!word.getClass().equals(EndFunction.class)) {
-			result.add(word);
-			word = words.remove(0);
-		}
-
-		return result;
+	private static Words extractBodyFunction(Words words) {
+		return words.cutToExclusive(EndFunction.class);
 	}
 
-	private static void extractIf(List<IWord> words, List<List<IWord>> expression, List<List<ILexeme>> body) {
+	private static void extractIf(Words words, List<List<IWord>> expression, List<List<ILexeme>> body) {
 		String scope = "expression";
 		List<IWord> nextExpression = new ArrayList<IWord>();
-		List<IWord> nextBody = new ArrayList<IWord>();
+		Words nextBody = new Words("");
 
-		IWord word = words.remove(0);
+		IWord word = words.cutFirst();
 		while (!word.getClass().equals(EndIf.class)) {
 			if (scope.equals("expression")) {
 				if (word.getClass().equals(Then.class)) {
 					scope = "body";
 					expression.add(new ArrayList<IWord>(nextExpression));
 					nextExpression.clear();
-					word = words.remove(0);
-				}
-				else {
+					word = words.cutFirst();
+				} else {
 					nextExpression.add(word);
-					word = words.remove(0);
+					word = words.cutFirst();
 				}
-			}
-			else if (scope.equals("body")) {
+			} else if (scope.equals("body")) {
 				if (word.getClass().equals(Else.class)) {
 					body.add(parse(nextBody));
 					nextBody.clear();
-					word = words.remove(0);
-				}
-				else if (word.getClass().equals(ElseIf.class)) {
+					word = words.cutFirst();
+				} else if (word.getClass().equals(ElseIf.class)) {
 					scope = "expression";
 					body.add(parse(nextBody));
 					nextBody.clear();
-					word = words.remove(0);
-				}
-				else {
+					word = words.cutFirst();
+				} else {
 					nextBody.add(word);
-					word = words.remove(0);
+					word = words.cutFirst();
 				}
 			}
 		}
@@ -109,7 +77,7 @@ public class Lexemes {
 		body.add(parse(nextBody));
 	}
 
-	private static List<ILexeme> parse(List<IWord> words) {
+	private static List<ILexeme> parse(Words words) {
 		List<ILexeme> result = new ArrayList<ILexeme>();
 
 		if (words.isEmpty()) {
@@ -117,27 +85,23 @@ public class Lexemes {
 		}
 
 		List<ru.zainutdinov.vbs2js.word.Unknown> unknown = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
-		IWord word = words.remove(0);
+		IWord word = words.cutFirst();
 
 		while (true) {
 			Class<?> wordClass = word.getClass();
 
 			if (wordClass.equals(ru.zainutdinov.vbs2js.word.Unknown.class)) {
-				unknown.add((ru.zainutdinov.vbs2js.word.Unknown)word);
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Public.class)) {
+				unknown.add((ru.zainutdinov.vbs2js.word.Unknown) word);
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Public.class)) {
 				result.add(new Public());
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Private.class)) {
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Private.class)) {
 				result.add(new Private());
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Return.class)) {
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Return.class)) {
 				// TODO
 				List<ru.zainutdinov.vbs2js.word.Unknown> return_ = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
 				return_.add(new ru.zainutdinov.vbs2js.word.Unknown("return "));
 				result.add(new Unknown(return_));
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.True.class)) {
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.True.class)) {
 				// TODO: test
 				if (!unknown.isEmpty()) {
 					result.add(new Unknown(new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>(unknown)));
@@ -148,8 +112,7 @@ public class Lexemes {
 				List<ru.zainutdinov.vbs2js.word.Unknown> true_ = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
 				true_.add(new ru.zainutdinov.vbs2js.word.Unknown("true"));
 				result.add(new Unknown(true_));
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.False.class)) {
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.False.class)) {
 				// TODO: test
 				if (!unknown.isEmpty()) {
 					result.add(new Unknown(new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>(unknown)));
@@ -160,32 +123,28 @@ public class Lexemes {
 				List<ru.zainutdinov.vbs2js.word.Unknown> false_ = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
 				false_.add(new ru.zainutdinov.vbs2js.word.Unknown("false"));
 				result.add(new Unknown(false_));
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Sub.class)) {
-				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown)words.remove(0);
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Sub.class)) {
+				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
 
-				List<IWord> parameters = extractParameters(words);
+				Words parameters = extractParameters(words);
 				List<ILexeme> body = parse(extractBodySub(words));
 				result.add(new Sub(name, parameters, body));
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Function.class)) {
-				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown)words.remove(0);
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Function.class)) {
+				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
 
-				List<IWord> parameters = extractParameters(words);
+				Words parameters = extractParameters(words);
 				List<ILexeme> body = parse(extractBodyFunction(words));
 				result.add(new Function(name, parameters, body));
-			}
-			else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
+			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
 				List<List<IWord>> expression = new ArrayList<List<IWord>>();
 				List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
 				extractIf(words, expression, body);
 				result.add(new If(expression, body));
-			}
-			else {
+			} else {
 				// TODO: test for new IWord
 			}
 
-			if (words.size() == 0) {
+			if (words.isEmpty()) {
 				if (!unknown.isEmpty()) {
 					result.add(new Unknown(unknown));
 				}
@@ -193,13 +152,13 @@ public class Lexemes {
 				break;
 			}
 
-			word = words.remove(0);
+			word = words.cutFirst();
 		}
 
 		return result;
 	}
-	
-	public Lexemes(List<IWord> words) {
+
+	public Lexemes(Words words) {
 		lexemes = parse(words);
 	}
 

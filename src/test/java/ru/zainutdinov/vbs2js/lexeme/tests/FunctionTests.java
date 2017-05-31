@@ -6,17 +6,17 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ru.zainutdinov.vbs2js.Words;
 import ru.zainutdinov.vbs2js.lexeme.Function;
 import ru.zainutdinov.vbs2js.lexeme.ILexeme;
 import ru.zainutdinov.vbs2js.word.Comma;
-import ru.zainutdinov.vbs2js.word.IWord;
 
 public class FunctionTests {
 
 	@Test
 	public void testJS_Function() {
 		ru.zainutdinov.vbs2js.word.Unknown name = new ru.zainutdinov.vbs2js.word.Unknown("FunctionName");
-		List<IWord> parameters = new ArrayList<IWord>();
+		Words parameters = new Words("");
 		parameters.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter1"));
 		parameters.add(new Comma());
 		parameters.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter2"));
