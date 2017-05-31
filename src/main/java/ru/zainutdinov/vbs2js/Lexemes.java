@@ -203,7 +203,13 @@ public class Lexemes {
 		lexemes = parse(words);
 	}
 
-	public List<ILexeme> getLexemes() {
-		return lexemes;
+	public String js() {
+		String result = "";
+
+		for (ILexeme lexeme : lexemes) {
+			result += lexeme.js(0);
+		}
+
+		return result;
 	}
 }
