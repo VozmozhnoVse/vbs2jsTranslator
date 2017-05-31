@@ -1,11 +1,7 @@
 Private Sub SubName
-	ObjectName.PropertyName = value
-End Sub
-
-Public Function FunctionName(Parameter)
 	If Parameter Then
-		FunctionName = false
+		ObjectName.MethodName1
 	Else
-		FunctionName = True
+		ObjectName.MethodName2
 	End If
-End Function
+End Sub

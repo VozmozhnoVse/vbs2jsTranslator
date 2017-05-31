@@ -1,12 +1,8 @@
 function SubName() {
-	ObjectName.PropertyName = value;
-}
-
-function FunctionName(Parameter) {
 	if (Parameter) {
-		return false;
+		ObjectName.MethodName1
 	}
 	else {
-		return true;
+		ObjectName.MethodName2
 	}
 }
