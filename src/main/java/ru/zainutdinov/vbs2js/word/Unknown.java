@@ -11,9 +11,4 @@ public class Unknown implements IWord {
 	public String getText() {
 		return text;
 	}
-
-	@Override
-	public String js() {
-		return text;
-	}
 }

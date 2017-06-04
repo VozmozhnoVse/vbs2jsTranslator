@@ -150,11 +150,14 @@ public class Words {
 		return result;
 	}
 
+	// TODO: delete. using only for UnknownWords
 	public String js() {
 		String result = "";
 
 		for (IWord word : words) {
-			result += word.js();
+			if (word.getClass().equals(ru.zainutdinov.vbs2js.word.Unknown.class)) {
+				result += ((ru.zainutdinov.vbs2js.word.Unknown) word).getText();
+			}
 		}
 
 		return result;

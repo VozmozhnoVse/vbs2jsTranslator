@@ -1,18 +1,15 @@
 package ru.zainutdinov.vbs2js.lexeme.tests;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import ru.zainutdinov.vbs2js.lexeme.ILexeme;
 import ru.zainutdinov.vbs2js.lexeme.If;
 import ru.zainutdinov.vbs2js.lexeme.Unknown;
-import ru.zainutdinov.vbs2js.word.False;
 import ru.zainutdinov.vbs2js.word.IWord;
-import ru.zainutdinov.vbs2js.word.True;
 
 public class IfTests {
 
@@ -20,7 +17,7 @@ public class IfTests {
 	public void testJS_If() {
 		List<List<IWord>> expression = new ArrayList<List<IWord>>();
 		List<IWord> expressionWords = new ArrayList<IWord>();
-		expressionWords.add(new True());
+		expressionWords.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
 		expression.add(expressionWords);
 
 		List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
@@ -32,14 +29,14 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsomething\n}\n", if_.js(0));
+		Assert.assertEquals("if (Expression) {\n\tsomething\n}\n", if_.js(0));
 	}
 
 	@Test
 	public void testJS_IfElse() {
 		List<List<IWord>> expression = new ArrayList<List<IWord>>();
 		List<IWord> expressionWords = new ArrayList<IWord>();
-		expressionWords.add(new True());
+		expressionWords.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
 		expression.add(expressionWords);
 
 		List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
@@ -58,7 +55,7 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsomething1\n}\nelse {\n\tsomething2\n}\n", if_.js(0));
+		Assert.assertEquals("if (Expression) {\n\tsomething1\n}\nelse {\n\tsomething2\n}\n", if_.js(0));
 	}
 
 	@Test
@@ -66,13 +63,13 @@ public class IfTests {
 		List<List<IWord>> expression = new ArrayList<List<IWord>>();
 
 		List<IWord> expression1Words = new ArrayList<IWord>();
-		expression1Words.add(new True());
+		expression1Words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression1"));
 		expression.add(expression1Words);
 
 		List<IWord> expression2Words = new ArrayList<IWord>();
-		expression2Words.add(new False());
+		expression2Words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression2"));
 		expression.add(expression2Words);
-		
+
 		List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
 
 		List<ILexeme> body1Lexemes = new ArrayList<ILexeme>();
@@ -95,7 +92,11 @@ public class IfTests {
 
 		If if_ = new If(expression, body);
 
-		Assert.assertEquals("if (true) {\n\tsomething1\n}\nelse if (false) {\n\tsomething2\n}\nelse {\n\tsomething3\n}\n", if_.js(0));
-		Assert.assertEquals("\tif (true) {\n\t\tsomething1\n\t}\n\telse if (false) {\n\t\tsomething2\n\t}\n\telse {\n\t\tsomething3\n\t}\n", if_.js(1));
+		Assert.assertEquals(
+				"if (Expression1) {\n\tsomething1\n}\nelse if (Expression2) {\n\tsomething2\n}\nelse {\n\tsomething3\n}\n",
+				if_.js(0));
+		Assert.assertEquals(
+				"\tif (Expression1) {\n\t\tsomething1\n\t}\n\telse if (Expression2) {\n\t\tsomething2\n\t}\n\telse {\n\t\tsomething3\n\t}\n",
+				if_.js(1));
 	}
 }

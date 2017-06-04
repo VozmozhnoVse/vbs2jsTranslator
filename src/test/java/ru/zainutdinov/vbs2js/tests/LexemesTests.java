@@ -64,16 +64,14 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Sub());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName"));
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
-		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter1"));
-		words.add(new ru.zainutdinov.vbs2js.word.Comma());
-		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter2"));
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameters"));
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
 
 		String js = new Lexemes(words).js();
 
-		Assert.assertEquals("function SubName((Parameter1, Parameter2)) {\n\tBody\n}\n", js);
+		Assert.assertEquals("function SubName(Parameters) {\n\tBody\n}\n", js);
 	}
 
 	@Test
@@ -109,16 +107,14 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Function());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName"));
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisOpen());
-		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter1"));
-		words.add(new ru.zainutdinov.vbs2js.word.Comma());
-		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameter2"));
+		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Parameters"));
 		words.add(new ru.zainutdinov.vbs2js.word.ParenthesisClose());
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
 
 		String js = new Lexemes(words).js();
 
-		Assert.assertEquals("function FunctionName((Parameter1, Parameter2)) {\n\tBody\n}\n", js);
+		Assert.assertEquals("function FunctionName(Parameters) {\n\tBody\n}\n", js);
 	}
 
 	@Test
@@ -134,7 +130,7 @@ public class LexemesTests {
 
 		String js = new Lexemes(words).js();
 
-		Assert.assertEquals("if ((Expression)) {\n\tBody\n}\n", js);
+		Assert.assertEquals("if (Expression) {\n\tBody\n}\n", js);
 	}
 
 	@Test
@@ -152,7 +148,7 @@ public class LexemesTests {
 
 		String js = new Lexemes(words).js();
 
-		Assert.assertEquals("if ((Expression)) {\n\tBody1\n}\nelse {\n\tBody2\n}\n", js);
+		Assert.assertEquals("if (Expression) {\n\tBody1\n}\nelse {\n\tBody2\n}\n", js);
 	}
 
 	@Test
@@ -176,7 +172,7 @@ public class LexemesTests {
 
 		String js = new Lexemes(words).js();
 
-		Assert.assertEquals(
-				"if ((Expression1)) {\n\tBody1\n}\nelse if ((Expression2)) {\n\tBody2\n}\nelse {\n\tBody3\n}\n", js);
+		Assert.assertEquals("if (Expression1) {\n\tBody1\n}\nelse if (Expression2) {\n\tBody2\n}\nelse {\n\tBody3\n}\n",
+				js);
 	}
 }
