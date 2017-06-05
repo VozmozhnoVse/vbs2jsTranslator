@@ -3,16 +3,27 @@ package ru.zainutdinov.vbs2js.lexeme;
 import ru.zainutdinov.vbs2js.Lexemes;
 import ru.zainutdinov.vbs2js.StringUtils;
 import ru.zainutdinov.vbs2js.Words;
+import ru.zainutdinov.vbs2js.word.EndFunction;
+import ru.zainutdinov.vbs2js.word.ParenthesisClose;
+import ru.zainutdinov.vbs2js.word.ParenthesisOpen;
 
 public class Function implements ILexeme {
 	private ru.zainutdinov.vbs2js.word.Unknown name;
 	private Words parameters;
 	private Lexemes body;
 
-	public Function(ru.zainutdinov.vbs2js.word.Unknown name, Words parameters, Lexemes body) {
-		this.name = name;
-		this.parameters = parameters;
-		this.body = body;
+	private static Words extractParameters(Words words) {
+		if (!words.checkFirstClass(ParenthesisOpen.class)) {
+			return new Words("");
+		}
+
+		return words.cutToInclusive(ParenthesisClose.class);
+	}
+
+	public Function(Words words) {
+		this.name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
+		this.parameters = extractParameters(words);
+		this.body = new Lexemes(words.cutToExclusive(EndFunction.class));
 	}
 
 	@Override

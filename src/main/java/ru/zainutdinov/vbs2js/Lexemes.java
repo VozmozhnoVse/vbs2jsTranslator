@@ -10,72 +10,11 @@ import ru.zainutdinov.vbs2js.lexeme.Private;
 import ru.zainutdinov.vbs2js.lexeme.Public;
 import ru.zainutdinov.vbs2js.lexeme.Sub;
 import ru.zainutdinov.vbs2js.lexeme.Unknown;
-import ru.zainutdinov.vbs2js.word.Else;
-import ru.zainutdinov.vbs2js.word.ElseIf;
-import ru.zainutdinov.vbs2js.word.EndFunction;
-import ru.zainutdinov.vbs2js.word.EndIf;
-import ru.zainutdinov.vbs2js.word.EndSub;
 import ru.zainutdinov.vbs2js.word.IWord;
-import ru.zainutdinov.vbs2js.word.ParenthesisClose;
-import ru.zainutdinov.vbs2js.word.ParenthesisOpen;
-import ru.zainutdinov.vbs2js.word.Then;
 
 public class Lexemes {
 
 	private List<ILexeme> lexemes = new ArrayList<ILexeme>();
-
-	private static Words extractParameters(Words words) {
-		if (!words.checkFirstClass(ParenthesisOpen.class)) {
-			return new Words("");
-		}
-
-		return words.cutToInclusive(ParenthesisClose.class);
-	}
-
-	private static Words extractBodySub(Words words) {
-		return words.cutToExclusive(EndSub.class);
-	}
-
-	private static Words extractBodyFunction(Words words) {
-		return words.cutToExclusive(EndFunction.class);
-	}
-
-	private static void extractIf(Words words, List<List<IWord>> expression, List<Lexemes> body) {
-		String scope = "expression";
-		List<IWord> nextExpression = new ArrayList<IWord>();
-		Words nextBody = new Words("");
-
-		IWord word = words.cutFirst();
-		while (!word.getClass().equals(EndIf.class)) {
-			if (scope.equals("expression")) {
-				if (word.getClass().equals(Then.class)) {
-					scope = "body";
-					expression.add(new ArrayList<IWord>(nextExpression));
-					nextExpression.clear();
-					word = words.cutFirst();
-				} else {
-					nextExpression.add(word);
-					word = words.cutFirst();
-				}
-			} else if (scope.equals("body")) {
-				if (word.getClass().equals(Else.class)) {
-					body.add(new Lexemes(nextBody));
-					nextBody.clear();
-					word = words.cutFirst();
-				} else if (word.getClass().equals(ElseIf.class)) {
-					scope = "expression";
-					body.add(new Lexemes(nextBody));
-					nextBody.clear();
-					word = words.cutFirst();
-				} else {
-					nextBody.add(word);
-					word = words.cutFirst();
-				}
-			}
-		}
-
-		body.add(new Lexemes(nextBody));
-	}
 
 	private static List<ILexeme> parse(Words words) {
 		List<ILexeme> result = new ArrayList<ILexeme>();
@@ -124,22 +63,11 @@ public class Lexemes {
 				false_.add(new ru.zainutdinov.vbs2js.word.Unknown("false"));
 				result.add(new Unknown(false_));
 			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Sub.class)) {
-				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
-
-				Words parameters = extractParameters(words);
-				Lexemes body = new Lexemes(extractBodySub(words));
-				result.add(new Sub(name, parameters, body));
+				result.add(new Sub(words));
 			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Function.class)) {
-				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
-
-				Words parameters = extractParameters(words);
-				Lexemes body = new Lexemes(extractBodyFunction(words));
-				result.add(new Function(name, parameters, body));
+				result.add(new Function(words));
 			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
-				List<List<IWord>> expression = new ArrayList<List<IWord>>();
-				List<Lexemes> body = new ArrayList<Lexemes>();
-				extractIf(words, expression, body);
-				result.add(new If(expression, body));
+				result.add(new If(words));
 			} else {
 				// TODO: test for new IWord
 			}
