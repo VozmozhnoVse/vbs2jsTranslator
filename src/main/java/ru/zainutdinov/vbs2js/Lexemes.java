@@ -1,7 +1,9 @@
 package ru.zainutdinov.vbs2js;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.zainutdinov.vbs2js.lexeme.Function;
 import ru.zainutdinov.vbs2js.lexeme.ILexeme;
@@ -13,6 +15,20 @@ import ru.zainutdinov.vbs2js.lexeme.Unknown;
 import ru.zainutdinov.vbs2js.word.IWord;
 
 public class Lexemes {
+	@FunctionalInterface
+	private static interface LexemeFactory {
+		public ILexeme create(Words words);
+	}
+	
+	private static final Map<Class<? extends IWord>, LexemeFactory> factoryMap = new HashMap<>();
+	
+	static {
+		factoryMap.put(ru.zainutdinov.vbs2js.word.Public.class, Public::new);
+		factoryMap.put(ru.zainutdinov.vbs2js.word.Private.class, Private::new);
+		factoryMap.put(ru.zainutdinov.vbs2js.word.Sub.class, Sub::new);
+		factoryMap.put(ru.zainutdinov.vbs2js.word.Function.class, Function::new);
+		factoryMap.put(ru.zainutdinov.vbs2js.word.If.class, If::new);
+	}
 
 	private List<ILexeme> lexemes = new ArrayList<ILexeme>();
 
@@ -31,10 +47,8 @@ public class Lexemes {
 
 			if (wordClass.equals(ru.zainutdinov.vbs2js.word.Unknown.class)) {
 				unknown.add((ru.zainutdinov.vbs2js.word.Unknown) word);
-			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Public.class)) {
-				result.add(new Public());
-			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Private.class)) {
-				result.add(new Private());
+			} else if (factoryMap.containsKey(wordClass)) {
+				result.add(factoryMap.get(wordClass).create(words));
 				/*
 				 * TODO } else if
 				 * (wordClass.equals(ru.zainutdinov.vbs2js.word.Return.class)) {
@@ -64,12 +78,6 @@ public class Lexemes {
 				 * false_.add(new ru.zainutdinov.vbs2js.word.Unknown("false"));
 				 * result.add(new Unknown(false_));
 				 */
-			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Sub.class)) {
-				result.add(new Sub(words));
-			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Function.class)) {
-				result.add(new Function(words));
-			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
-				result.add(new If(words));
 			} else {
 				// TODO: test for new IWord
 			}
