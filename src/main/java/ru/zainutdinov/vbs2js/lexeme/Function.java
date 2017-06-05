@@ -1,16 +1,15 @@
 package ru.zainutdinov.vbs2js.lexeme;
 
-import java.util.List;
-
+import ru.zainutdinov.vbs2js.Lexemes;
 import ru.zainutdinov.vbs2js.StringUtils;
 import ru.zainutdinov.vbs2js.Words;
 
 public class Function implements ILexeme {
 	private ru.zainutdinov.vbs2js.word.Unknown name;
 	private Words parameters;
-	private List<ILexeme> body;
+	private Lexemes body;
 
-	public Function(ru.zainutdinov.vbs2js.word.Unknown name, Words parameters, List<ILexeme> body) {
+	public Function(ru.zainutdinov.vbs2js.word.Unknown name, Words parameters, Lexemes body) {
 		this.name = name;
 		this.parameters = parameters;
 		this.body = body;
@@ -27,9 +26,7 @@ public class Function implements ILexeme {
 
 		result += ") {\n";
 
-		for (ILexeme lexeme : body) {
-			result += lexeme.js(tabLevel + 1);
-		}
+		result += body.js(tabLevel + 1);
 
 		result += tabs + "}\n";
 

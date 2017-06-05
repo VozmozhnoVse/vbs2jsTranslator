@@ -133,7 +133,7 @@ public class Lexemes {
 				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
 
 				Words parameters = extractParameters(words);
-				List<ILexeme> body = parse(extractBodyFunction(words));
+				Lexemes body = new Lexemes(extractBodyFunction(words));
 				result.add(new Function(name, parameters, body));
 			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
 				List<List<IWord>> expression = new ArrayList<List<IWord>>();
