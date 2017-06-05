@@ -16,4 +16,14 @@ public class ConverterTests {
 
 		Assert.assertEquals(jsExpected, jsActual);
 	}
+
+	@Test
+	public void testJS_firstRealCase() {
+		String vbs = FileUtils.readFileToString("firstRealCase.vbs");
+		String jsExpected = FileUtils.readFileToString("firstRealCase.js");
+
+		String jsActual = new Converter(vbs).js();
+
+		Assert.assertEquals(jsExpected, jsActual);
+	}
 }
