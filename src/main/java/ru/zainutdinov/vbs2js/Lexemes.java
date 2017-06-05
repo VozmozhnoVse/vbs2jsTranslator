@@ -40,7 +40,7 @@ public class Lexemes {
 		return words.cutToExclusive(EndFunction.class);
 	}
 
-	private static void extractIf(Words words, List<List<IWord>> expression, List<List<ILexeme>> body) {
+	private static void extractIf(Words words, List<List<IWord>> expression, List<Lexemes> body) {
 		String scope = "expression";
 		List<IWord> nextExpression = new ArrayList<IWord>();
 		Words nextBody = new Words("");
@@ -59,12 +59,12 @@ public class Lexemes {
 				}
 			} else if (scope.equals("body")) {
 				if (word.getClass().equals(Else.class)) {
-					body.add(parse(nextBody));
+					body.add(new Lexemes(nextBody));
 					nextBody.clear();
 					word = words.cutFirst();
 				} else if (word.getClass().equals(ElseIf.class)) {
 					scope = "expression";
-					body.add(parse(nextBody));
+					body.add(new Lexemes(nextBody));
 					nextBody.clear();
 					word = words.cutFirst();
 				} else {
@@ -74,7 +74,7 @@ public class Lexemes {
 			}
 		}
 
-		body.add(parse(nextBody));
+		body.add(new Lexemes(nextBody));
 	}
 
 	private static List<ILexeme> parse(Words words) {
@@ -137,7 +137,7 @@ public class Lexemes {
 				result.add(new Function(name, parameters, body));
 			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.If.class)) {
 				List<List<IWord>> expression = new ArrayList<List<IWord>>();
-				List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
+				List<Lexemes> body = new ArrayList<Lexemes>();
 				extractIf(words, expression, body);
 				result.add(new If(expression, body));
 			} else {

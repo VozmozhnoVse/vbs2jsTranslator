@@ -2,14 +2,15 @@ package ru.zainutdinov.vbs2js.lexeme;
 
 import java.util.List;
 
+import ru.zainutdinov.vbs2js.Lexemes;
 import ru.zainutdinov.vbs2js.StringUtils;
 import ru.zainutdinov.vbs2js.word.IWord;
 
 public class If implements ILexeme {
 	List<List<IWord>> expression;
-	List<List<ILexeme>> body;
+	List<Lexemes> body;
 
-	public If(List<List<IWord>> expression, List<List<ILexeme>> body) {
+	public If(List<List<IWord>> expression, List<Lexemes> body) {
 		this.expression = expression;
 		this.body = body;
 	}
@@ -18,7 +19,7 @@ public class If implements ILexeme {
 		return expression.get(i);
 	}
 
-	public List<ILexeme> getBody(int i) {
+	public Lexemes getBody(int i) {
 		return body.get(i);
 	}
 
@@ -46,11 +47,9 @@ public class If implements ILexeme {
 
 			result += ") {\n";
 
-			List<ILexeme> currentBody = body.get(j);
+			Lexemes currentBody = body.get(j);
 
-			for (int i = 0; i < currentBody.size(); i++) {
-				result += currentBody.get(i).js(tabLevel + 1);
-			}
+			result += currentBody.js(tabLevel + 1);
 
 			result += tabs + "}\n";
 		}
@@ -58,11 +57,9 @@ public class If implements ILexeme {
 		if (body.size() > j) {
 			result += tabs + "else {\n";
 
-			List<ILexeme> currentBody = body.get(j);
+			Lexemes currentBody = body.get(j);
 
-			for (int i = 0; i < currentBody.size(); i++) {
-				result += currentBody.get(i).js(tabLevel + 1);
-			}
+			result += currentBody.js(tabLevel + 1);
 
 			result += tabs + "}\n";
 		}

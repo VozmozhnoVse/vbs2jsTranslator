@@ -6,9 +6,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ru.zainutdinov.vbs2js.lexeme.ILexeme;
+import ru.zainutdinov.vbs2js.Lexemes;
+import ru.zainutdinov.vbs2js.Words;
 import ru.zainutdinov.vbs2js.lexeme.If;
-import ru.zainutdinov.vbs2js.lexeme.Unknown;
 import ru.zainutdinov.vbs2js.word.IWord;
 
 public class IfTests {
@@ -20,11 +20,11 @@ public class IfTests {
 		expressionWords.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
 		expression.add(expressionWords);
 
-		List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
-		List<ILexeme> bodyLexemes = new ArrayList<ILexeme>();
-		List<ru.zainutdinov.vbs2js.word.Unknown> bodyLexemesWords = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
+		Words bodyLexemesWords = new Words("");
 		bodyLexemesWords.add(new ru.zainutdinov.vbs2js.word.Unknown("something"));
-		bodyLexemes.add(new Unknown(bodyLexemesWords));
+		Lexemes bodyLexemes = new Lexemes(bodyLexemesWords);
+
+		List<Lexemes> body = new ArrayList<Lexemes>();
 		body.add(bodyLexemes);
 
 		If if_ = new If(expression, body);
@@ -39,18 +39,16 @@ public class IfTests {
 		expressionWords.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression"));
 		expression.add(expressionWords);
 
-		List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
-
-		List<ILexeme> body1Lexemes = new ArrayList<ILexeme>();
-		List<ru.zainutdinov.vbs2js.word.Unknown> body1LexemesWords = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
+		Words body1LexemesWords = new Words("");
 		body1LexemesWords.add(new ru.zainutdinov.vbs2js.word.Unknown("something1"));
-		body1Lexemes.add(new Unknown(body1LexemesWords));
-		body.add(body1Lexemes);
+		Lexemes body1Lexemes = new Lexemes(body1LexemesWords);
 
-		List<ILexeme> body2Lexemes = new ArrayList<ILexeme>();
-		List<ru.zainutdinov.vbs2js.word.Unknown> body2LexemesWords = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
+		Words body2LexemesWords = new Words("");
 		body2LexemesWords.add(new ru.zainutdinov.vbs2js.word.Unknown("something2"));
-		body2Lexemes.add(new Unknown(body2LexemesWords));
+		Lexemes body2Lexemes = new Lexemes(body2LexemesWords);
+
+		List<Lexemes> body = new ArrayList<Lexemes>();
+		body.add(body1Lexemes);
 		body.add(body2Lexemes);
 
 		If if_ = new If(expression, body);
@@ -70,24 +68,21 @@ public class IfTests {
 		expression2Words.add(new ru.zainutdinov.vbs2js.word.Unknown("Expression2"));
 		expression.add(expression2Words);
 
-		List<List<ILexeme>> body = new ArrayList<List<ILexeme>>();
-
-		List<ILexeme> body1Lexemes = new ArrayList<ILexeme>();
-		List<ru.zainutdinov.vbs2js.word.Unknown> body1LexemesWords = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
+		Words body1LexemesWords = new Words("");
 		body1LexemesWords.add(new ru.zainutdinov.vbs2js.word.Unknown("something1"));
-		body1Lexemes.add(new Unknown(body1LexemesWords));
-		body.add(body1Lexemes);
+		Lexemes body1Lexemes = new Lexemes(body1LexemesWords);
 
-		List<ILexeme> body2Lexemes = new ArrayList<ILexeme>();
-		List<ru.zainutdinov.vbs2js.word.Unknown> body2LexemesWords = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
+		Words body2LexemesWords = new Words("");
 		body2LexemesWords.add(new ru.zainutdinov.vbs2js.word.Unknown("something2"));
-		body2Lexemes.add(new Unknown(body2LexemesWords));
-		body.add(body2Lexemes);
+		Lexemes body2Lexemes = new Lexemes(body2LexemesWords);
 
-		List<ILexeme> body3Lexemes = new ArrayList<ILexeme>();
-		List<ru.zainutdinov.vbs2js.word.Unknown> body3LexemesWords = new ArrayList<ru.zainutdinov.vbs2js.word.Unknown>();
+		Words body3LexemesWords = new Words("");
 		body3LexemesWords.add(new ru.zainutdinov.vbs2js.word.Unknown("something3"));
-		body3Lexemes.add(new Unknown(body3LexemesWords));
+		Lexemes body3Lexemes = new Lexemes(body3LexemesWords);
+
+		List<Lexemes> body = new ArrayList<Lexemes>();
+		body.add(body1Lexemes);
+		body.add(body2Lexemes);
 		body.add(body3Lexemes);
 
 		If if_ = new If(expression, body);
