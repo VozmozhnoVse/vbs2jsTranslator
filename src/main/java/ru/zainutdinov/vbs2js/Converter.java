@@ -12,6 +12,6 @@ public class Converter {
 		Words words = new Words(vbs);
 		Lexemes lexemes = new Lexemes(words);
 
-		return lexemes.js();
+		return lexemes.js(0);
 	}
 }

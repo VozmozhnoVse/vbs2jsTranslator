@@ -127,7 +127,7 @@ public class Lexemes {
 				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
 
 				Words parameters = extractParameters(words);
-				List<ILexeme> body = parse(extractBodySub(words));
+				Lexemes body = new Lexemes(extractBodySub(words));
 				result.add(new Sub(name, parameters, body));
 			} else if (wordClass.equals(ru.zainutdinov.vbs2js.word.Function.class)) {
 				ru.zainutdinov.vbs2js.word.Unknown name = (ru.zainutdinov.vbs2js.word.Unknown) words.cutFirst();
@@ -162,11 +162,11 @@ public class Lexemes {
 		lexemes = parse(words);
 	}
 
-	public String js() {
+	public String js(int tabLevel) {
 		String result = "";
 
 		for (ILexeme lexeme : lexemes) {
-			result += lexeme.js(0);
+			result += lexeme.js(tabLevel);
 		}
 
 		return result;

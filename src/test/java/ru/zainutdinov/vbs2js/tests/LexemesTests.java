@@ -13,7 +13,7 @@ public class LexemesTests {
 		Words words = new Words("");
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("sometext"));
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("sometext\n", js);
 	}
@@ -26,7 +26,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.True());
 		words.add(new ru.zainutdinov.vbs2js.word.False());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("true\nfalse\n", js);
 	}
@@ -38,7 +38,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("function SubName() {\n}\n", js);
 	}
@@ -53,7 +53,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("SubName2"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("function SubName1() {\n}\nfunction SubName2() {\n}\n", js);
 	}
@@ -69,7 +69,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndSub());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("function SubName(Parameters) {\n\tBody\n}\n", js);
 	}
@@ -81,7 +81,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("function FunctionName() {\n}\n", js);
 	}
@@ -96,7 +96,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("FunctionName2"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("function FunctionName1() {\n}\nfunction FunctionName2() {\n}\n", js);
 	}
@@ -112,7 +112,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndFunction());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("function FunctionName(Parameters) {\n\tBody\n}\n", js);
 	}
@@ -128,7 +128,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndIf());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("if (Expression) {\n\tBody\n}\n", js);
 	}
@@ -146,7 +146,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body2"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndIf());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("if (Expression) {\n\tBody1\n}\nelse {\n\tBody2\n}\n", js);
 	}
@@ -170,7 +170,7 @@ public class LexemesTests {
 		words.add(new ru.zainutdinov.vbs2js.word.Unknown("Body3"));
 		words.add(new ru.zainutdinov.vbs2js.word.EndIf());
 
-		String js = new Lexemes(words).js();
+		String js = new Lexemes(words).js(0);
 
 		Assert.assertEquals("if (Expression1) {\n\tBody1\n}\nelse if (Expression2) {\n\tBody2\n}\nelse {\n\tBody3\n}\n",
 				js);
