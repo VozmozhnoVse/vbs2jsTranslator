@@ -18,18 +18,19 @@ public class LexemesTests {
 		Assert.assertEquals("sometext\n", js);
 	}
 
-	@Test
-	public void testJS_PublicPrivateReturnTrueFalse() {
-		Words words = new Words("");
-		words.add(new ru.zainutdinov.vbs2js.word.Public());
-		words.add(new ru.zainutdinov.vbs2js.word.Private());
-		words.add(new ru.zainutdinov.vbs2js.word.True());
-		words.add(new ru.zainutdinov.vbs2js.word.False());
-
-		String js = new Lexemes(words).js(0);
-
-		Assert.assertEquals("true\nfalse\n", js);
-	}
+	/*
+	 * TODO
+	 * 
+	 * @Test public void testJS_PublicPrivateReturnTrueFalse() { Words words =
+	 * new Words(""); words.add(new ru.zainutdinov.vbs2js.word.Public());
+	 * words.add(new ru.zainutdinov.vbs2js.word.Private()); words.add(new
+	 * ru.zainutdinov.vbs2js.word.True()); words.add(new
+	 * ru.zainutdinov.vbs2js.word.False());
+	 * 
+	 * String js = new Lexemes(words).js(0);
+	 * 
+	 * Assert.assertEquals("true\nfalse\n", js); }
+	 */
 
 	@Test
 	public void testJS_Sub() {
